@@ -1,2 +1,2 @@
-# custom-more-info
-Customize More-info dialogs for Home Assistant
+# custom-attributes
+Custom attributes for Home Assistant
