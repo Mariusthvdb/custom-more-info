@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "module": "esnext",
+    "target": "ES2015",
+    "moduleResolution": "node",
+    "types": ["node"],
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "declaration": false,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@types": ["types"],
+      "@constants": ["constants"]  
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}
