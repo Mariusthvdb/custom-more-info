@@ -27,21 +27,21 @@ console.info(
 class CustomAttributes {
 
     constructor() {
-        this.#selector = new HAQuerySelector();
-        this.#selector.addEventListener(HAQuerySelectorEvent.ON_LOVELACE_PANEL_LOAD, (event) => {
+        this._selector = new HAQuerySelector();
+        this._selector.addEventListener(HAQuerySelectorEvent.ON_LOVELACE_PANEL_LOAD, (event) => {
             this.storeConfig(event.detail);
         });
-        this.#selector.addEventListener(HAQuerySelectorEvent.ON_LOVELACE_MORE_INFO_DIALOG_OPEN, (event) => {
+        this._selector.addEventListener(HAQuerySelectorEvent.ON_LOVELACE_MORE_INFO_DIALOG_OPEN, (event) => {
             this.queryAttributes(event.detail);
 		});
-        this.#selector.listen();
+        this._selector.listen();
     }
 
     protected storeConfig(detail: OnLovelacePanelLoadDetail): void {
         detail.HA_PANEL_LOVELACE.element
             .then((lovelacePanel: Lovelace) => {
-                this.#config = lovelacePanel?.lovelace?.config?.custom_attributes || {};
-                this.#filters = {};
+                this._config = lovelacePanel?.lovelace?.config?.custom_attributes || {};
+                this._filters = {};
             });
     }
 
@@ -81,16 +81,17 @@ class CustomAttributes {
 
     protected getFilters(entityId: string, deviceClass: string): string[] {
 
-        if (this.#filters[entityId]) {
-            return this.#filters[entityId];
+        if (this._filters[entityId]) {
+            return this._filters[entityId];
         }
 
         const filters = new Set<string>();
-        const config = this.#config?.filter_attributes;
+        const config = this._config?.filter_attributes;
         const filterByEntityId = config?.by_entity_id;
         const filterByGlob = config?.by_glob;
         const filterByDomain = config?.by_domain;
         const filterByDeviceClass = config?.by_device_class;
+        const domain = entityId.replace(/^(.+)\..+$/, '$1');
 
         if (filterByGlob) {
             Object.entries(filterByGlob).forEach((entry: [string, string[]]): void => {
@@ -111,15 +112,10 @@ class CustomAttributes {
             });
         }
 
-        if (filterByDomain) {
-            Object.entries(filterByDomain).forEach((entry: [string, string[]]): void => {
-                const [ domain, domainFilters ] = entry;
-                if (entityId.startsWith(`${domain}.`)) {
-                    filters.clear();
-                    domainFilters.forEach((filter: string): void => {
-                        filters.add(filter);
-                    });
-                }
+        if (filterByDomain?.[domain]) {
+            filters.clear();
+            filterByDomain[domain].forEach((filter: string): void => {
+                filters.add(filter);
             });
         }
 
@@ -130,11 +126,11 @@ class CustomAttributes {
             });
         }
 
-        this.#filters[entityId] = Array.from(
+        this._filters[entityId] = Array.from(
             filters.values()
         );
 
-        return this.#filters[entityId];
+        return this._filters[entityId];
         
     }
 
@@ -145,9 +141,9 @@ class CustomAttributes {
         return new RegExp(`^${regExpString}$`);
     }
     
-    #selector: HAQuerySelector;
-    #config: CustomAttributesConfig;
-    #filters: Record<string, string[]>;
+    private _selector: HAQuerySelector;
+    private _config: CustomAttributesConfig;
+    private _filters: Record<string, string[]>;
 
 }
 
