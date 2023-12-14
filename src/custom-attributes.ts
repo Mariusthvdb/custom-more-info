@@ -29,11 +29,11 @@ class CustomAttributes {
     constructor() {
         this._selector = new HAQuerySelector();
         this._selector.addEventListener(HAQuerySelectorEvent.ON_LOVELACE_PANEL_LOAD, (event) => {
-            console.log('lovelace panel has been rendered so loading the configuration');
+            this._debug('lovelace panel has been rendered so loading the configuration');
             this.storeConfig(event.detail);
         });
         this._selector.addEventListener(HAQuerySelectorEvent.ON_LOVELACE_MORE_INFO_DIALOG_OPEN, (event) => {
-            console.log('a more info dialog has been opened so querying it for attributes');
+            this._debug('a more info dialog has been opened so querying it for attributes');
             this.queryAttributes(event.detail);
 		});
         this._selector.listen();
@@ -42,11 +42,21 @@ class CustomAttributes {
     protected storeConfig(detail: OnLovelacePanelLoadDetail): void {
         detail.HA_PANEL_LOVELACE.element
             .then((lovelacePanel: Lovelace) => {
-                this._config = lovelacePanel?.lovelace?.config?.custom_attributes || {};
-                console.log('the config has been loaded');
-                console.log('printing the config...');
-                console.log(this._config);
+                const config = lovelacePanel?.lovelace?.config?.custom_attributes;
+                if (config) {
+                    this._config = config;
+                    this._debug('the config has been loaded, printing the config...');
+                } else if (
+                    !this._config ||
+                    !Object.keys(this._config).length
+                ) {
+                    this._debug('no config has been found so initiating an empty config...');
+                    this._config = {};
+                } else {
+                    this._debug('this dashboard doesn‘t contain a config but there is a previous one in memory...');
+                }
                 this._filters = {};
+                this._debug(this._config);
             });
     }
 
@@ -68,13 +78,13 @@ class CustomAttributes {
             .query(SELECTOR.HA_ATTRIBUTES)
             .element
             .then((attributes: Attributes) => {
-                console.log('finish the task of querying attributes, the result is');
+                this._debug('finished the task of querying attributes, the result is');
                 if (attributes) {
-                    console.log('attributes have been found');
-                    console.log(attributes);
+                    this._debug('attributes have been found');
+                    this._debug(attributes);
                     this.applyFilters(attributes);
                 } else {
-                    console.log('attributes have not been found');
+                    this._debug('attributes have not been found');
                 }
             });
     }
@@ -96,7 +106,7 @@ class CustomAttributes {
         const entityId = attributes.__stateObj.entity_id;
         const deviceClass = attributes.__stateObj.attributes.device_class;
 
-        console.log(`getting the filters for ${entityId}`);
+        this._debug(`getting the filters for ${entityId}`);
 
         if (this._filters[entityId]) {
             return this._filters[entityId];
@@ -113,7 +123,7 @@ class CustomAttributes {
         if (filterByGlob) {
             Object.entries(filterByGlob).forEach((entry: [string, string[]]): void => {
                 const [ glob, globFilters ] = entry;
-                const regExp = this.getEntityIdRegExp(glob);
+                const regExp = this._getEntityIdRegExp(glob);
                 if (regExp.test(entityId)) {
                     globFilters.forEach((filter: string): void => {
                         filters.add(filter);
@@ -150,18 +160,24 @@ class CustomAttributes {
             filters.values()
         );
 
-        console.log('finish the filters retrival, printing the filters...');
-        console.log(this._filters[entityId]);
+        this._debug('finished the filters retrival, printing the filters...');
+        this._debug(this._filters[entityId]);
 
         return this._filters[entityId];
         
     }
 
-    private getEntityIdRegExp(glob: string): RegExp {
+    private _getEntityIdRegExp(glob: string): RegExp {
         const regExpString = glob
             .replace(ESCAPE_REG_EXP, '\\$&')
             .replace(/\*/g, '.*');
         return new RegExp(`^${regExpString}$`);
+    }
+
+    private _debug(message: unknown): void {
+        if (this._config?.debug) {
+            console.debug(message);
+        }
     }
     
     private _selector: HAQuerySelector;
@@ -173,6 +189,5 @@ class CustomAttributes {
 // Ensure the DOM is fully loaded before running the script
 Promise.resolve(customElements.whenDefined(SELECTOR.HUI_VIEW))
 	.then(() => {
-        console.log('hui-view is defined, instantiating the plugin...');
 		window.customAttributes = new CustomAttributes();
 	});
