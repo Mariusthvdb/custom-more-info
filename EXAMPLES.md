@@ -2,31 +2,30 @@
 
 ```yaml
 ##########################################################################################
-# Hierarchy of filter_attributes parameters
+# Available filter_attributes parameters
 #
-# by_entity_id: overrides any other parameter
+# by_entity_id:
 #
-# by_domain: overrides by_device_class and by_glob
+# by_domain:
 #
-# by_device_class: overrides by_glob
+# by_device_class:
 #
-# by_glob: overriden by any other parameter
+# by_glob:
+#
+# All used parameters are merged
 ##########################################################################################
 
 filter_attributes:
 
-# by_entity_id overrides any other parameter
   by_entity_id:
 
     sensor.cpu_speed:
       - brand
 
-# by_domain overrides by_device_class and by_glob
   by_domain:
 
     binary_sensor:
       - hysteresis
-      - icon_color # needs to be set here, because by_glob is overridden
 
     light:
       - all
@@ -34,21 +33,20 @@ filter_attributes:
     siren:
       - available_tones
 
-# by_device_class overrides by_glob
   by_device_class:
 
     enum:
       - options
 
-# by_glob overriden by any other parameter
 # take care and always quote
   by_glob:
 
     '*.*':
-      - icon_color # check by_domain binary_sensor overriding this for that domain.
+      - icon_color
 
     'device_tracker.google*':
-      - all #is_guest
+      - all
+      # - is_guest
 
     'sensor.ha_*_version':
       - all
@@ -56,21 +54,16 @@ filter_attributes:
     'sensor.buienradar_*':
       - stationname
 
-    'sensor.*_actueel':
+# we can also use Yaml anchors to easily c&p 
+    'sensor.*_actueel': &meter_type
       - meter_type
       - meter_type_name
 
-    'sensor.*_totaal':
-      - meter_type
-      - meter_type_name
+    'sensor.*_totaal': *meter_type
 
-    'sensor.*_amperage':
-      - meter_type
-      - meter_type_name
+    'sensor.*_amperage': *meter_type
 
-    'sensor.*_voltage':
-      - meter_type
-      - meter_type_name
+    'sensor.*_voltage': *meter_type
 ```
 
 ## Edit, safe (and refresh)
