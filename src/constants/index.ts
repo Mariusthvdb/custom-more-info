@@ -8,6 +8,7 @@ export enum SELECTOR {
     MORE_INFO_DEFAULT = 'more-info-default',
     MORE_INFO_VACUUM = 'more-info-vacuum',
     MORE_INFO_LIGHT = 'more-info-light',
+    MORE_INFO_SIREN = 'more-info-siren',
     HA_ATTRIBUTES = 'ha-attributes'
 }
 
