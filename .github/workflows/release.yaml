@@ -1,0 +1,76 @@
+name: Create release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set-up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache
+          key: dependencies-v1-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+      - name: Install deps
+        run: yarn install --frozen-lockfile
+      - name: Test
+        run: yarn test:ts
+      - name: Build Changelog
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@v4
+        with:
+          configurationJson: |
+            {
+              "categories": [
+                {
+                  "title": "## 🚀 Features",
+                  "labels": ["🌟 feature", "✨ feature-request", "enhancement", "request"]
+                },
+                {
+                  "title": "## 🛠 Fixes",
+                  "labels": ["fix", "🐛 bug"]
+                },
+                {
+                  "title": "## 🧩 Dependencies",
+                  "labels": ["dependencies"]
+                },
+                {
+                  "title": "## ⚙️ Configuration",
+                  "labels": ["configuration"]
+                },
+                {
+                  "title": "## 📝 Documentation",
+                  "labels": ["📝 documentation"]
+                },
+                {
+                  "title": "## 📦 Other",
+                  "labels": []
+                }
+              ],
+              "template": "#{{CHANGELOG}}",
+              "pr_template": "- #{{TITLE}}\n   - PR: ##{{NUMBER}} by @#{{AUTHOR}}",
+              "empty_template": "#{{OWNER}}\n#{{REPO}}\n#{{FROM_TAG}}\n#{{TO_TAG}}",
+              "max_pull_requests": 1000,
+              "max_back_track_time_days": 1000
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create a release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            custom-attributes.js
+          body: |
+            ${{ steps.build_changelog.outputs.changelog }}
