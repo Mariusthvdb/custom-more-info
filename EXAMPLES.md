@@ -41,13 +41,36 @@ filter_attributes:
       - options
 
 # by_glob overriden by any other parameter
+# take care and always quote
   by_glob:
 
     '*.*':
       - icon_color # check by_domain binary_sensor overriding this for that domain.
 
-    device_tracker.google*:
+    'device_tracker.google*':
       - all #is_guest
+
+    'sensor.ha_*_version':
+      - all
+
+    'sensor.buienradar_*':
+      - stationname
+
+    'sensor.*_actueel':
+      - meter_type
+      - meter_type_name
+
+    'sensor.*_totaal':
+      - meter_type
+      - meter_type_name
+
+    'sensor.*_amperage':
+      - meter_type
+      - meter_type_name
+
+    'sensor.*_voltage':
+      - meter_type
+      - meter_type_name
 ```
 
 ## Edit, safe (and refresh)
