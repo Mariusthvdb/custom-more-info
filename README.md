@@ -38,7 +38,7 @@ custom_attributes:
 
 #### > by_entity_id
 
-This parameter filters attributes from entities matching their `entity_id`, it must contain an array of attributes' names. This parameter will override any other parameter that you add to `filter_attributes`:
+This parameter filters attributes from entities matching their `entity_id`, it must contain an array of attributes names. This parameter will override any other parameter that you add to `filter_attributes`:
 
 ```yaml
 custom_attributes:
@@ -51,7 +51,7 @@ custom_attributes:
 
 #### > by_domain
 
-This parameter filters attributes from entities matching their domain, it must contain an array of attributes' names. This parameter will override the parameters `by_device_class` and `by_glob`:
+This parameter filters attributes from entities matching their domain, it must contain an array of attributes names. This parameter will override the parameters `by_device_class` and `by_glob`:
 
 ```yaml
 custom_attributes:
@@ -64,7 +64,7 @@ custom_attributes:
 
 #### > by_device_class
 
-This parameter filters attributes from entities matching their device class, it must contain an array of attributes' names. This parameter will override the `by_glob` parameter:
+This parameter filters attributes from entities matching their device class, it must contain an array of attributes names. This parameter will override the `by_glob` parameter:
 
 ```yaml
 custom_attributes:
@@ -77,7 +77,7 @@ custom_attributes:
 
 #### > by_glob
 
-This parameter filters attributes from entities matching a glob pattern of their `entity_id`, it must contain an array of attributes' names. This parameter can be overriden by any other parameter in `filter_attributes`:
+This parameter filters attributes from entities matching a glob pattern of their `entity_id`, it must contain an array of attributes names. This parameter can be overriden by any other parameter in `filter_attributes`:
 
 ```yaml
 custom_attributes:
