@@ -29,9 +29,11 @@ class CustomAttributes {
     constructor() {
         this._selector = new HAQuerySelector();
         this._selector.addEventListener(HAQuerySelectorEvent.ON_LOVELACE_PANEL_LOAD, (event) => {
+            console.log('lovelace panel has been rendered so loading the configuration');
             this.storeConfig(event.detail);
         });
         this._selector.addEventListener(HAQuerySelectorEvent.ON_LOVELACE_MORE_INFO_DIALOG_OPEN, (event) => {
+            console.log('a more info dialog has been opened so querying it for attributes');
             this.queryAttributes(event.detail);
 		});
         this._selector.listen();
@@ -41,6 +43,9 @@ class CustomAttributes {
         detail.HA_PANEL_LOVELACE.element
             .then((lovelacePanel: Lovelace) => {
                 this._config = lovelacePanel?.lovelace?.config?.custom_attributes || {};
+                console.log('the config has been loaded');
+                console.log('printing the config...');
+                console.log(this._config);
                 this._filters = {};
             });
     }
@@ -63,8 +68,13 @@ class CustomAttributes {
             .query(SELECTOR.HA_ATTRIBUTES)
             .element
             .then((attributes: Attributes) => {
+                console.log('finish the task of querying attributes, the result is');
                 if (attributes) {
+                    console.log('attributes have been found');
+                    console.log(attributes);
                     this.applyFilters(attributes);
+                } else {
+                    console.log('attributes have not been found');
                 }
             });
     }
@@ -85,6 +95,8 @@ class CustomAttributes {
 
         const entityId = attributes.__stateObj.entity_id;
         const deviceClass = attributes.__stateObj.attributes.device_class;
+
+        console.log(`getting the filters for ${entityId}`);
 
         if (this._filters[entityId]) {
             return this._filters[entityId];
@@ -138,6 +150,9 @@ class CustomAttributes {
             filters.values()
         );
 
+        console.log('finish the filters retrival, printing the filters...');
+        console.log(this._filters[entityId]);
+
         return this._filters[entityId];
         
     }
@@ -158,5 +173,6 @@ class CustomAttributes {
 // Ensure the DOM is fully loaded before running the script
 Promise.resolve(customElements.whenDefined(SELECTOR.HUI_VIEW))
 	.then(() => {
+        console.log('hui-view is defined, instantiating the plugin...');
 		window.customAttributes = new CustomAttributes();
 	});
