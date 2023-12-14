@@ -50,8 +50,11 @@ filter_attributes:
       - all #is_guest
 ```
 
-## Edit and refresh
+## Edit, safe (and refresh)
 
-After editing and saving your `filter_attributes`, you refesh the Dashboard via the top right menu item and next reload the view.
+If you are using [yaml mode](https://www.home-assistant.io/dashboards/dashboards/#using-yaml-for-the-default-dashboard), you need to refesh the Dashboard via the top right menu item (3-dots) and next reload the view after editing and saving your `filter_attributes`. 
+The reload is required for [each Dashboard](https://www.home-assistant.io/dashboards/dashboards) you might use.
 
 <img width="215" alt="refresh" src="https://github.com/Mariusthvdb/custom-attributes/assets/33354141/9d57c2db-10c1-44af-9e0b-f0704331cb3c">
+
+When in storage mode (UI) home-assistant-query-selector takes care of that and your set on safe.
