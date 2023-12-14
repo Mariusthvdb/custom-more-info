@@ -16,11 +16,10 @@ import {
     ESCAPE_REG_EXP,
     ALL_FILTER
 } from '@constants';
-
-const VERSION = '20231211';
+import { version } from '../package.json';
 
 console.info(
-    `%c  ${NAME}  \n%c  Version ${VERSION} ${DESCRIPTION}`,
+    `%c  ${NAME}  \n%c  Version ${version} ${DESCRIPTION}`,
     'color: gold; font-weight: bold; background: black',
     'color: white; font-weight: bold; background: steelblue'
 );

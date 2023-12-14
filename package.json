@@ -1,14 +1,21 @@
 {
-  "name": "custom-ui-filter-attributes",
+  "name": "custom-attributes",
   "version": "1.0.0",
-  "description": "Filter attributes from more-info dialogs attributes dropdown",
-  "main": "custom-ui-filter-attributes.js",
-  "repository": "git@github.com:elchininet/custom-ui-filter-attributes.git",
+  "description": "Custom attributes for Home Assistant",
+  "main": "custom-attributes.js",
+  "repository": "git@github.com:Mariusthvdb/custom-attributes.git",
+  "author": "Mariusthvdb",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "rollup --config rollup.config.js --bundleConfigAsCjs"
+    "build": "rollup --config rollup.config.js --bundleConfigAsCjs",
+    "test:ts": "tsc --noEmit",
+    "prepare": "yarn build",
+    "prepublishOnly": "yarn test:ts",
+    "version": "git add .",
+    "postversion": "git push && git push --tags"
   },
   "devDependencies": {
+    "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "rollup": "^4.8.0",
     "rollup-plugin-terser": "^7.0.2",
