@@ -1,14 +1,30 @@
-custom_attributes:
-  filter_attributes:
-    ## Filter attributes from specific entities
-    sensor.my_sensor:
-      - some_attribute
-      - some_attribute
-    ## Filter attributes from entities that match a glob
-    "light.kitchen_*":
-      - some_attribute
-      - some_attribute
-    ## Filter attributes from domains
-    "person.*":
-      - some_attribute
-      - some_attribute
+## Example configuration file
+
+```yaml
+filter_attributes:
+
+  by_glob:
+
+    '*.*':
+      - icon_color
+    device_tracker.google*:
+      - is_guest
+
+  by_domain:
+
+    binary_sensor:
+      - hysteresis
+
+    siren:
+      - available_tones
+
+  by_device_class:
+
+    enum:
+      - options
+
+  by_entity_id:
+
+    sensor.cpu_speed:
+      - brand
+```
