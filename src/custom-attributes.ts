@@ -55,7 +55,8 @@ class CustomAttributes {
                 [
                     SELECTOR.MORE_INFO_DEFAULT,
                     SELECTOR.MORE_INFO_VACUUM,
-                    SELECTOR.MORE_INFO_LIGHT
+                    SELECTOR.MORE_INFO_LIGHT,
+                    SELECTOR.MORE_INFO_SIREN
                 ].join(',')
             )
             .$
