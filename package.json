@@ -5,7 +5,7 @@
   "main": "custom-attributes.js",
   "repository": "git@github.com:Mariusthvdb/custom-attributes.git",
   "author": "Mariusthvdb",
-  "license": "Apache-2.0",
+  "license": "GPL-3.0",
   "scripts": {
     "build": "rollup --config rollup.config.js --bundleConfigAsCjs",
     "test:ts": "tsc --noEmit",
