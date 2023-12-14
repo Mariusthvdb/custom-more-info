@@ -14,6 +14,7 @@ export interface Attributes extends Element {
 }
 
 export interface CustomAttributesConfig {
+    debug?: boolean;
     filter_attributes?: {
         by_entity_id?: Record<string, string[]>;
         by_domain: Record<string, string[]>;
