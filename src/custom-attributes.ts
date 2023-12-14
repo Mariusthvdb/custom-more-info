@@ -7,14 +7,16 @@ import {
 import {
     Lovelace,
     CustomAttributesConfig,
-    Attributes
+    Attributes,
+    Filters
 } from '@types';
 import {
     NAME,
     DESCRIPTION,
     SELECTOR,
     ESCAPE_REG_EXP,
-    ALL_FILTER
+    ALL_FILTER,
+    IGNORED_ATTRIBUTES
 } from '@constants';
 import { version } from '../package.json';
 
@@ -82,16 +84,32 @@ class CustomAttributes {
     protected applyFilters(attributes: Attributes): void {
 
         const filters = this.getFilters(attributes);
+        const finalFilters = filters.hide.filter((filter: string) => !filters.unhide.includes(filter));
 
         const extraFilters = attributes.extraFilters || '';
         const separator = extraFilters.length
             ? ','
             : '';
-        attributes.extraFilters = extraFilters + separator + filters.join(',');
+        attributes.extraFilters = extraFilters + separator + finalFilters.join(',');
+
+        if (filters.unhide.length) {
+
+            filters.unhide.forEach((filter: string): void => {
+
+                if (
+                    IGNORED_ATTRIBUTES.includes(filter) &&
+                    filter in attributes.__stateObj.attributes
+                ) {
+                    attributes.__stateObj.attributes[`${filter} `] = attributes.__stateObj.attributes[filter];
+                }
+
+            });
+
+        }
         
     }
 
-    protected getFilters(attributes: Attributes): string[] {
+    protected getFilters(attributes: Attributes): Filters {
 
         const entityId = attributes.__stateObj.entity_id;
         const deviceClass = attributes.__stateObj.attributes.device_class;
@@ -105,52 +123,93 @@ class CustomAttributes {
         }
 
         const filters = new Set<string>();
-        const config = this._config?.filter_attributes;
-        const filterByEntityId = config?.by_entity_id;
-        const filterByGlob = config?.by_glob;
-        const filterByDomain = config?.by_domain;
-        const filterByDeviceClass = config?.by_device_class;
+        const unFilters = new Set<string>();
+
+        const filterAttributes = this._config?.filter_attributes;
+        const filterByGlob = filterAttributes?.by_glob;
+        const filterByDeviceClass = filterAttributes?.by_device_class;
+        const filterByDomain = filterAttributes?.by_domain;
+        const filterByEntityId = filterAttributes?.by_entity_id;
+       
+        const unFilterAttributes = this._config?.unfilter_attributes;
+        const unFilterByGlob = unFilterAttributes?.by_glob;
+        const unFilterByDeviceClass = unFilterAttributes?.by_device_class;
+        const unFilterByDomain = unFilterAttributes?.by_domain;
+        const unFilterByEntityId = unFilterAttributes?.by_entity_id;        
+
         const domain = entityId.replace(/^(.+)\..+$/, '$1');
 
+        // By Glob
         if (filterByGlob) {
-            Object.entries(filterByGlob).forEach((entry: [string, string[]]): void => {
-                const [ glob, globFilters ] = entry;
-                const regExp = this._getEntityIdRegExp(glob);
-                if (regExp.test(entityId)) {
-                    globFilters.forEach((filter: string): void => {
-                        filters.add(filter);
-                    });
-                }
+            const globFilters = this._getFiltersByGlob(entityId, filterByGlob);
+            globFilters.forEach((filter: string): void => {
+                filters.add(filter);
             });
         }
 
+        if (unFilterByGlob) {
+            const globFilters = this._getFiltersByGlob(entityId, unFilterByGlob);
+            globFilters.forEach((filter: string): void => {
+                unFilters.add(filter);
+            });
+        }
+
+        // By device class
         if (filterByDeviceClass?.[deviceClass]) {
             filterByDeviceClass[deviceClass].forEach((filter: string): void => {
                 filters.add(filter);
             });
         }
 
+        if (unFilterByDeviceClass?.[deviceClass]) {
+            unFilterByDeviceClass[deviceClass].forEach((filter: string): void => {
+                unFilters.add(filter);
+            });
+        }
+
+        // By domain
         if (filterByDomain?.[domain]) {
             filterByDomain[domain].forEach((filter: string): void => {
                 filters.add(filter);
             });
         }
 
+        if (unFilterByDomain?.[domain]) {
+            unFilterByDomain[domain].forEach((filter: string): void => {
+                unFilters.add(filter);
+            });
+        }
+
+        // By entity id
         if (filterByEntityId?.[entityId]) {
             filterByEntityId[entityId].forEach((filter: string): void => {
                 filters.add(filter);
             });
         }
 
+        if (unFilterByEntityId?.[entityId]) {
+            unFilterByEntityId[entityId].forEach((filter: string): void => {
+                unFilters.add(filter);
+            });
+        }
+
+        // All
         if (filters.has(ALL_FILTER)) {
             Object.keys(attributes.__stateObj.attributes).forEach((filter: string) => {
                 filters.add(filter);
             });
         }
 
-        this._filters[entityId] = Array.from(
-            filters.values()
-        );
+        if (unFilters.has(ALL_FILTER)) {
+            Object.keys(attributes.__stateObj.attributes).forEach((filter: string) => {
+                unFilters.add(filter);
+            });
+        }
+
+        this._filters[entityId] = {
+            hide: Array.from(filters.values()),
+            unhide: Array.from(unFilters.values())
+        };
 
         this._debug('finished the filters retrieval, printing the filters...');
         this._debug(this._filters[entityId]);
@@ -180,10 +239,22 @@ class CustomAttributes {
             }            
         }
     }
+
+    private _getFiltersByGlob(entityId: string, filter: Record<string, string[]>): string[] {
+        const filters: string[] = [];
+        Object.entries(filter).forEach((entry: [string, string[]]): void => {
+            const [ glob, globFilters ] = entry;
+            const regExp = this._getEntityIdRegExp(glob);
+            if (regExp.test(entityId)) {
+                filters.push(...globFilters);
+            }
+        });
+        return filters;
+    }
     
     private _selector: HAQuerySelector;
     private _config: CustomAttributesConfig;
-    private _filters: Record<string, string[]>;
+    private _filters: Record<string, Filters>;
 
 }
 
