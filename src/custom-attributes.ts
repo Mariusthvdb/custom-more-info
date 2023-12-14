@@ -13,7 +13,8 @@ import {
     NAME,
     DESCRIPTION,
     SELECTOR,
-    ESCAPE_REG_EXP
+    ESCAPE_REG_EXP,
+    ALL_FILTER
 } from '@constants';
 
 const VERSION = '20231211';
@@ -70,17 +71,21 @@ class CustomAttributes {
     }
 
     protected applyFilters(attributes: Attributes): void {
-        const entityId = attributes.__stateObj.entity_id;
-        const deviceClass = attributes.__stateObj.attributes.device_class;
-        const filters = this.getFilters(entityId, deviceClass);
+
+        const filters = this.getFilters(attributes);
+
         const extraFilters = attributes.extraFilters || '';
         const separator = extraFilters.length
             ? ','
             : '';
         attributes.extraFilters = extraFilters + separator + filters.join(',');
+        
     }
 
-    protected getFilters(entityId: string, deviceClass: string): string[] {
+    protected getFilters(attributes: Attributes): string[] {
+
+        const entityId = attributes.__stateObj.entity_id;
+        const deviceClass = attributes.__stateObj.attributes.device_class;
 
         if (this._filters[entityId]) {
             return this._filters[entityId];
@@ -123,6 +128,13 @@ class CustomAttributes {
         if (filterByEntityId?.[entityId]) {
             filters.clear();
             filterByEntityId[entityId].forEach((filter: string): void => {
+                filters.add(filter);
+            });
+        }
+
+        if (filters.has(ALL_FILTER)) {
+            filters.clear();
+            Object.keys(attributes.__stateObj.attributes).forEach((filter: string) => {
                 filters.add(filter);
             });
         }
