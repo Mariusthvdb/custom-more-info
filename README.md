@@ -8,7 +8,7 @@
 ### What is Custom attributes
 This is a custom resource for Home Assistant to customize *which entity attributes are displayed* in the Dashboard on `more-info` cards.
 Moreover, if configured so that no more attributes are left to display (all attributes are filtered), the *attributes dropdown box is not rendered at all*.
-Custom attributes gives the user ultimate control over the More-info panel.
+Custom attributes gives the user ultimate control over the attributes in the More-info panel.
 
 If you want to hide the more-info panel completely, use [Kiosk-mode](https://github.com/NemesisRE/kiosk-mode), which is the ultimate tool for that and much more.
 
