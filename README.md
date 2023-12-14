@@ -17,6 +17,8 @@ Note: This replaces the existing custom-ui-more-info.js standalone script, or th
 _______
 ## Configuration and enable
 
+Download and install the plugin like any other custom resource in Home Assistant.
+
 To enable the plugin one needs to add the `custom_attributes` parameter to the root of the lovelace yaml file of each Dashboard:
 
 ```yaml
@@ -38,7 +40,7 @@ custom_attributes:
 
 #### > by_entity_id
 
-This parameter filters attributes from entities matching their `entity_id`, it must contain an array of attributes names. This parameter will override any other parameter that you add to `filter_attributes`:
+This parameter filters attributes from entities matching their `entity_id`, it must contain an array of attributes names:
 
 ```yaml
 custom_attributes:
@@ -51,7 +53,7 @@ custom_attributes:
 
 #### > by_domain
 
-This parameter filters attributes from entities matching their domain, it must contain an array of attributes names. This parameter will override the parameters `by_device_class` and `by_glob`:
+This parameter filters attributes from entities matching their domain, it must contain an array of attributes names:
 
 ```yaml
 custom_attributes:
@@ -64,7 +66,7 @@ custom_attributes:
 
 #### > by_device_class
 
-This parameter filters attributes from entities matching their device class, it must contain an array of attributes names. This parameter will override the `by_glob` parameter:
+This parameter filters attributes from entities matching their device class, it must contain an array of attributes names:
 
 ```yaml
 custom_attributes:
@@ -77,13 +79,13 @@ custom_attributes:
 
 #### > by_glob
 
-This parameter filters attributes from entities matching a glob pattern of their `entity_id`, it must contain an array of attributes names. This parameter can be overriden by any other parameter in `filter_attributes`:
+This parameter filters attributes from entities matching a glob pattern of their `entity_id`, it must contain an array of attributes names and globs need to be quoted:
 
 ```yaml
 custom_attributes:
   filter_attributes:
     by_glob:
-      sensor.garden_*:
+      'sensor.garden_*':
         - some_attribute_name
         - some_attribute_name
 ```
