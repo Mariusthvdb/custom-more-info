@@ -89,7 +89,9 @@ custom_attributes:
         - some_attribute_name
         - some_attribute_name
 ```
+## Examples
 
+Please find some real life examples [here](https://github.com/Mariusthvdb/custom-attributes/blob/main/EXAMPLES.md)
 ____
 
 ### Result of Custom Attributes in the More-info panel
