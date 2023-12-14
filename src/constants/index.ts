@@ -11,3 +11,7 @@ export enum SELECTOR {
 export const ESCAPE_REG_EXP = /[.?+^$[\]\\(){}|-]/g;
 
 export const ALL_FILTER = 'all';
+
+export const IGNORED_ATTRIBUTES = [
+    'device_class'
+];
