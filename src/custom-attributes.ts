@@ -112,28 +112,24 @@ class CustomAttributes {
         }
 
         if (filterByDeviceClass?.[deviceClass]) {
-            filters.clear();
             filterByDeviceClass[deviceClass].forEach((filter: string): void => {
                 filters.add(filter);
             });
         }
 
         if (filterByDomain?.[domain]) {
-            filters.clear();
             filterByDomain[domain].forEach((filter: string): void => {
                 filters.add(filter);
             });
         }
 
         if (filterByEntityId?.[entityId]) {
-            filters.clear();
             filterByEntityId[entityId].forEach((filter: string): void => {
                 filters.add(filter);
             });
         }
 
         if (filters.has(ALL_FILTER)) {
-            filters.clear();
             Object.keys(attributes.__stateObj.attributes).forEach((filter: string) => {
                 filters.add(filter);
             });
