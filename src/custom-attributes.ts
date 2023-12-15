@@ -109,6 +109,8 @@ class CustomAttributes {
         this._debug(`getting the filters for ${entityId}`);
 
         if (this._filters[entityId]) {
+            this._debug('the filters for this entity have been found in memory, recovering filters...');
+            this._debug(this._filters[entityId]);
             return this._filters[entityId];
         }
 
@@ -176,7 +178,16 @@ class CustomAttributes {
 
     private _debug(message: unknown): void {
         if (this._config?.debug) {
-            console.debug(message);
+            if (
+                typeof message === 'object' &&
+                !(message instanceof Node)
+            ) {
+                console.debug(
+                    JSON.stringify(message, null, 4)
+                );
+            } else {
+                console.debug(message);
+            }            
         }
     }
     
