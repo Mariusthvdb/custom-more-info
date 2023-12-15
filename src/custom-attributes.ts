@@ -65,10 +65,7 @@ class CustomAttributes {
             .selector
             .$
             .query(SELECTOR.MORE_INFO_CONTENT)
-            .$
-            .query(':host > *')
-            .$
-            .query(SELECTOR.HA_ATTRIBUTES)
+            .deepQuery(SELECTOR.HA_ATTRIBUTES)
             .element
             .then((attributes: Attributes) => {
                 this._debug('finished the task of querying attributes, the result is');
