@@ -66,14 +66,7 @@ class CustomAttributes {
             .$
             .query(SELECTOR.MORE_INFO_CONTENT)
             .$
-            .query(
-                [
-                    SELECTOR.MORE_INFO_DEFAULT,
-                    SELECTOR.MORE_INFO_VACUUM,
-                    SELECTOR.MORE_INFO_LIGHT,
-                    SELECTOR.MORE_INFO_SIREN
-                ].join(',')
-            )
+            .query(':host > *')
             .$
             .query(SELECTOR.HA_ATTRIBUTES)
             .element
