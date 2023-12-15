@@ -155,7 +155,7 @@ class CustomAttributes {
             filters.values()
         );
 
-        this._debug('finished the filters retrival, printing the filters...');
+        this._debug('finished the filters retrieval, printing the filters...');
         this._debug(this._filters[entityId]);
 
         return this._filters[entityId];
