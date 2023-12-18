@@ -1,5 +1,6 @@
 # Custom attributes for Home Assistant
 
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=flat-square)](https://github.com/hacs/integration)
 [![GH-release](https://img.shields.io/github/v/release/Mariusthvdb/custom-attributes.svg?style=flat-square)](https://github.com/Mariusthvdb/custom-attributes/releases)
 [![GH-downloads](https://img.shields.io/github/downloads/Mariusthvdb/custom-attributes/total?style=flat-square)](https://github.com/Mariusthvdb/custom-attributes/releases)
 [![GH-last-commit](https://img.shields.io/github/last-commit/Mariusthvdb/custom-attributes.svg?style=flat-square)](https://github.com/Mariusthvdb/custom-attributes/commits/master)
@@ -31,6 +32,10 @@ To enable the plugin one needs to add the `custom_attributes` parameter to the r
 custom_attributes:
    # Configuration
 ```
+
+## Installation
+
+<a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=Mariusthvdb&repository=custom-attributes&category=plugin" target="_blank" rel="noreferrer noopener"><img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open your Home Assistant instance and open a repository inside the Home Assistant Community Store." /></a>
 
 ## Configuration options
 
