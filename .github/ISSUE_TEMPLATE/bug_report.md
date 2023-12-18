@@ -53,9 +53,15 @@ We cant help you without that exact info
  - Browser [e.g. stock browser, safari]
  - Version [e.g. 22]
 
-**The yaml config if applicable**
+**The custom-attributes configuration**
 ```yaml
-
+filter_attributes:
+  by_glob:
+    '*.*':
+      - id
+  by_domain:
+    light:
+      - all
 ```
 
 **Additional context**
