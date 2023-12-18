@@ -22,9 +22,15 @@ If you want to hide the more-info panel completely, use [Kiosk-mode](https://git
 Note: This replaces the existing custom-ui-more-info.js standalone script, or the more-info functionality in the original [Custom-ui](https://github.com/Mariusthvdb/custom-ui).
 
 _______
-## Configuration and enable
+
+## Installation
 
 Download and install the plugin like any other custom resource in Home Assistant.
+
+
+<a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=Mariusthvdb&repository=custom-attributes&category=plugin" target="_blank" rel="noreferrer noopener"><img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open your Home Assistant instance and open a repository inside the Home Assistant Community Store." /></a>
+
+## Enable
 
 To enable the plugin one needs to add the `custom_attributes` parameter to the root of the lovelace yaml file of each Dashboard:
 
@@ -33,19 +39,17 @@ custom_attributes:
    # Configuration
 ```
 
-## Installation
-
-<a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=Mariusthvdb&repository=custom-attributes&category=plugin" target="_blank" rel="noreferrer noopener"><img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open your Home Assistant instance and open a repository inside the Home Assistant Community Store." /></a>
-
 ## Configuration options
 
 ### filter_attributes
 
-This parameter controls what should be filtered out from the more-info dialogs attributes:
+This parameter controls which attributes should be (un)filtered in the more-info dialogs:
 
 ```yaml
 custom_attributes:
   filter_attributes:
+    # filter_attributes parameters
+  unfilter_attributes:
     # filter_attributes parameters   
 ```
 
@@ -55,7 +59,7 @@ This parameter filters attributes from entities matching their `entity_id`, it m
 
 ```yaml
 custom_attributes:
-  filter_attributes:
+  (un)filter_attributes:
     by_entity_id:
       binay_sensor.name_of_binary_sensor:
         - some_attribute_name
@@ -68,7 +72,7 @@ This parameter filters attributes from entities matching their domain, it must c
 
 ```yaml
 custom_attributes:
-  filter_attributes:
+  (un)filter_attributes:
     by_domain:
       sensor:
         - some_attribute_name
@@ -81,7 +85,7 @@ This parameter filters attributes from entities matching their device class, it 
 
 ```yaml
 custom_attributes:
-  filter_attributes:
+  (un)filter_attributes:
     by_device_class:
       motion:
         - some_attribute_name
@@ -94,7 +98,7 @@ This parameter filters attributes from entities matching a glob pattern of their
 
 ```yaml
 custom_attributes:
-  filter_attributes:
+  (un)filter_attributes:
     by_glob:
       'sensor.garden_*':
         - some_attribute_name
