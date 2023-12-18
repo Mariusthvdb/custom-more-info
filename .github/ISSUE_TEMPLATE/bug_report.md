@@ -22,7 +22,7 @@ A clear and concise description of what the bug is.
     ]
 }
 ```
-** Custom-attributes Version:**
+**Custom-attributes Version:**
 1.0.0
 
 **To Reproduce**
