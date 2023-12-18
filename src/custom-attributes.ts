@@ -194,13 +194,13 @@ class CustomAttributes {
         }
 
         // All
-        if (filters.has(ALL_FILTER)) {
+        if (this._config?.filter_all || filters.has(ALL_FILTER)) {
             Object.keys(attributes.__stateObj.attributes).forEach((filter: string) => {
                 filters.add(filter);
             });
         }
 
-        if (unFilters.has(ALL_FILTER)) {
+        if (this._config?.unfilter_all || unFilters.has(ALL_FILTER)) {
             Object.keys(attributes.__stateObj.attributes).forEach((filter: string) => {
                 unFilters.add(filter);
             });

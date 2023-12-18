@@ -28,6 +28,8 @@ export interface Filters {
 
 export interface CustomAttributesConfig {
     debug?: boolean;
+    filter_all?: boolean;
+    unfilter_all?: boolean;
     filter_attributes?: AttributeFilters;   
     unfilter_attributes?: AttributeFilters;
 }
