@@ -41,15 +41,19 @@ custom_attributes:
 
 ## Configuration options
 
-3 configuration options available:
+5 configuration options available:
 
 * `debug`
+* `filter_all`
+* `unfilter_all`
 * `filter_attributes`
 * `unfilter_attributes`
 
 ```yaml
 custom_attributes:
   debug: true
+  filter_all: true
+  unfilter_all: true
   filter_attributes:
     # parameters
   unfilter_attributes:
