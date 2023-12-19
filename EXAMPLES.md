@@ -32,6 +32,9 @@ debug: true
 
 unfilter_attributes:
 
+# special boolean setting for 'all'
+# unfilter_all: true #/ false
+
   by_domain:
 # filtered by Home Assistant by default
     binary_sensor:
@@ -53,6 +56,9 @@ unfilter_attributes:
 ##########################################################################################
 
 filter_attributes:
+
+# special boolean setting for 'all'
+# filter_all: true #/ false
 
   by_glob:
 
@@ -121,4 +127,4 @@ On subviews, a second reload of the subview could be needed, just be sure the ca
 
 <img width="215" alt="refresh" src="https://github.com/Mariusthvdb/custom-attributes/assets/33354141/9d57c2db-10c1-44af-9e0b-f0704331cb3c">
 
-When in storage mode (UI) home-assistant-query-selector takes care of that and your set on safe.
+When in storage mode (UI) `home-assistant-query-selector` takes care of that and you're set on safe. No need to refresh manually.
