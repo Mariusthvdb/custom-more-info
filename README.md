@@ -78,6 +78,7 @@ custom_attributes:
   debug: true/false
 
   filter_attributes:
+    filter_all: true
     by_entity_id:
       sensor.some_sensor:
         - <attribute>
@@ -100,6 +101,7 @@ custom_attributes:
 # identical structure for 'unfilter' on all parameters
 
   unfilter_attributes:
+    unfilter_all: true
     by_entity_id:
 
     by_domain:
