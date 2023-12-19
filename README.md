@@ -76,7 +76,7 @@ The parameters control which attributes should be (un)filtered in the more-info 
 custom_attributes:
 
   debug: true/false
-
+  filter_all: true ##
   filter_attributes:
     by_entity_id:
       sensor.some_sensor:
@@ -99,6 +99,7 @@ custom_attributes:
 
 # identical structure for 'unfilter' on all parameters
 
+  unfilter_all: true ##
   unfilter_attributes:
     by_entity_id:
 
