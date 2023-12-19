@@ -30,10 +30,10 @@ debug: true
 # Unfilter                                                                               #
 ##########################################################################################
 
-unfilter_attributes:
-
 # special boolean setting for 'all'
-# unfilter_all: true #/ false
+unfilter_all: true
+
+unfilter_attributes:
 
   by_domain:
 # filtered by Home Assistant by default
@@ -55,10 +55,10 @@ unfilter_attributes:
 # Filter                                                                                 #
 ##########################################################################################
 
-filter_attributes:
-
 # special boolean setting for 'all'
-# filter_all: true #/ false
+filter_all: true
+
+filter_attributes:
 
   by_glob:
 
