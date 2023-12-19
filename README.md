@@ -8,10 +8,10 @@
 
 ### What is Custom attributes
 
-This is a custom resource for Home Assistant to customize *which entity attributes are displayed* in the Dashboard on `more-info` cards.
+This is a custom Plugin for Home Assistant to customize *which entity attributes are displayed* in the Dashboard on `more-info` cards.
 Moreover, if configured so that no more attributes are left to display (all attributes are filtered), the *attributes dropdown box is not rendered at all*.
 
-From now on you are in control of the More-info attributes. 
+From now on *you* are in control of the More-info attributes. 
 Filter all, unfilter all, or select which to see/hide by glob, domain, device_class, or entity_id. 
 Any combination is possible!
 
