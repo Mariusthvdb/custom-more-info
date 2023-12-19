@@ -41,90 +41,130 @@ custom_attributes:
 
 ## Configuration options
 
-### filter_attributes
+3 configuration options available:
 
-This parameter controls which attributes should be (un)filtered in the more-info dialogs:
+* `debug`
+* `filter_attributes`
+* `unfilter_attributes`
 
 ```yaml
 custom_attributes:
+  debug: true
   filter_attributes:
-    # filter_attributes parameters
+    # parameters
   unfilter_attributes:
-    # filter_attributes parameters   
+    # parameters   
 ```
 
-#### > by_entity_id
+The parameters control which attributes should be (un)filtered in the more-info dialogs.
 
-This parameter filters attributes from entities matching their `entity_id`, it must contain an array of attributes names:
+### Available parameters:
+
+2 special boolean parameters for generic customization
+* `filter_all`
+* `unfilter_all`
+
+4 'by' parameters alowing detailed customization on various levels, requiring an array of attributes
+* `by_entity_id`
+* `by_domain`
+* `by_device_class`
+* `by_glob`
+
+### All possible options:
 
 ```yaml
 custom_attributes:
-  (un)filter_attributes:
+
+  debug: true/false
+
+  filter_attributes:
     by_entity_id:
-      binay_sensor.name_of_binary_sensor:
-        - some_attribute_name
-        - some_attribute_name
-```
-
-#### > by_domain
-
-This parameter filters attributes from entities matching their domain, it must contain an array of attributes names:
-
-```yaml
-custom_attributes:
-  (un)filter_attributes:
+      sensor.some_sensor:
+        - <attribute>
+        - <attribute>
     by_domain:
-      sensor:
-        - some_attribute_name
-        - some_attribute_name
-```
-
-#### > by_device_class
-
-This parameter filters attributes from entities matching their device class, it must contain an array of attributes names:
-
-```yaml
-custom_attributes:
-  (un)filter_attributes:
+      binary_sensor:
+        - <attribute>
+        - <attribute>
     by_device_class:
       motion:
-        - some_attribute_name
-        - some_attribute_name
+        - <attribute>
+        - <attribute>
+    by_glob:
+      'sensor.*_sensor':
+        - <attribute>
+        - <attribute>
+      '*.*':
+        - <attribute>
+
+# identical structure for 'unfilter' on all parameters
+
+  unfilter_attributes:
+    by_entity_id:
+
+    by_domain:
+
+    by_device_class:
+
+    by_glob:
+
 ```
 
-#### > by_glob
+### Special filter 'all'
 
-This parameter filters attributes from entities matching a glob pattern of their `entity_id`, it must contain an array of attributes names and globs need to be quoted:
+The `all` filter is available for all parameters:
 
 ```yaml
-custom_attributes:
-  (un)filter_attributes:
-    by_glob:
-      'sensor.garden_*':
-        - some_attribute_name
-        - some_attribute_name
+filter_attributes:
+  by_domain:
+    light:
+      - all
 ```
+and here, will filter all attributes on all Domain Light more-info panels.
+
+## Filter merge
+
+Finally, all configured filters are merged.
+To check the complete filter that gets applied, enable `debug: true` and open an Inspector window, where the full JSON object is printed.
+
+
 ## Examples
 
-Please find some real life examples [here](https://github.com/Mariusthvdb/custom-attributes/blob/main/EXAMPLES.md)
-____
+Please find some real life examples [here](https://github.com/Mariusthvdb/custom-attributes/blob/main/EXAMPLES.md) which explains all available options in detail.
+
 
 ### Result of Custom Attributes in the More-info panel
 
 **Before filtering:**
 
-<img width="350" alt="before_2" src="https://github.com/Mariusthvdb/custom-attributes/assets/33354141/158d7019-e3c4-40f8-9d31-c5a931a29c6d">
+Device_class attribute `options`
+
+<img width="350" alt="Device class options before" src="https://github.com/Mariusthvdb/custom-attributes/assets/33354141/158d7019-e3c4-40f8-9d31-c5a931a29c6d">
+
 
 Siren:
 
 <img width="350" alt="Siren before" src="https://github.com/Mariusthvdb/custom-attributes/assets/33354141/cb66242c-908e-46dc-aa72-2512759871a5">
 
+
+Light group:
+
+<img width="350" alt="Light group before" src="https://github.com/Mariusthvdb/custom-attributes/assets/33354141/5109ac33-60f0-46e7-8fd8-ba4a15f066fb">
+
+
 **After filtering**
 
-attribute `options` *('Mogelijke statussen' in Dutch)*
+Device_class attribute `options` after *('Mogelijke statussen' in Dutch)*
 
-<img width="350" alt="after" src="https://github.com/Mariusthvdb/custom-attributes/assets/33354141/586ae28e-7799-49f3-8be7-2e41096e8f80">
+<img width="350" alt="Device class options after" src="https://github.com/Mariusthvdb/custom-attributes/assets/33354141/586ae28e-7799-49f3-8be7-2e41096e8f80">
+
 
 Siren after:
 
 <img width="350" alt="Siren after" src="https://github.com/Mariusthvdb/custom-attributes/assets/33354141/d2cc0773-28e9-4dba-9328-1292f117db33">
+
+
+Light group after:
+
+<img width="350" alt="Light group after" src="https://github.com/Mariusthvdb/custom-attributes/assets/33354141/d692020b-c2b3-4708-9344-6d2014d7d0bc">
+
