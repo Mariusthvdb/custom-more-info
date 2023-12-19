@@ -123,7 +123,7 @@ filter_attributes:
 ```
 and here, will filter all attributes on all Domain Light more-info panels.
 
-## Filter merge
+### Filter merge
 
 Finally, all configured filters are merged.
 To check the complete filter that gets applied, enable `debug: true` and open an Inspector window, where the full JSON object is printed.
