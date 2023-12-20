@@ -22,8 +22,8 @@ export interface AttributeFilters {
 }
 
 export interface Filters {
-    hide: string[];
-    unhide: string[];
+    filter_attributes: string[];
+    unfilter_attributes: string[];
 }
 
 export interface CustomAttributesConfig {

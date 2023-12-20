@@ -84,7 +84,7 @@ class CustomAttributes {
     protected applyFilters(attributes: Attributes): void {
 
         const filters = this.getFilters(attributes);
-        const finalFilters = filters.hide.filter((filter: string) => !filters.unhide.includes(filter));
+        const finalFilters = filters.filter_attributes.filter((filter: string) => !filters.unfilter_attributes.includes(filter));
 
         const extraFilters = attributes.extraFilters || '';
         const separator = extraFilters.length
@@ -92,9 +92,9 @@ class CustomAttributes {
             : '';
         attributes.extraFilters = extraFilters + separator + finalFilters.join(',');
 
-        if (filters.unhide.length) {
+        if (filters.unfilter_attributes.length) {
 
-            filters.unhide.forEach((filter: string): void => {
+            filters.unfilter_attributes.forEach((filter: string): void => {
 
                 if (
                     IGNORED_ATTRIBUTES.includes(filter) &&
@@ -207,8 +207,8 @@ class CustomAttributes {
         }
 
         this._filters[entityId] = {
-            hide: Array.from(filters.values()),
-            unhide: Array.from(unFilters.values())
+            filter_attributes: Array.from(filters.values()),
+            unfilter_attributes: Array.from(unFilters.values())
         };
 
         this._debug('finished the filters retrieval, printing the filters...');
