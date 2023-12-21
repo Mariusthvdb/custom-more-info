@@ -1,25 +1,27 @@
-# Custom attributes for Home Assistant
+# Custom More-info for Home Assistant
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=flat-square)](https://github.com/hacs/integration)
-[![GH-release](https://img.shields.io/github/v/release/Mariusthvdb/custom-attributes.svg?style=flat-square)](https://github.com/Mariusthvdb/custom-attributes/releases)
-[![GH-downloads](https://img.shields.io/github/downloads/Mariusthvdb/custom-attributes/total?style=flat-square)](https://github.com/Mariusthvdb/custom-attributes/releases)
-[![GH-last-commit](https://img.shields.io/github/last-commit/Mariusthvdb/custom-attributes.svg?style=flat-square)](https://github.com/Mariusthvdb/custom-attributes/commits/master)
-[![GH-code-size](https://img.shields.io/github/languages/code-size/Mariusthvdb/custom-attributes.svg?color=red&style=flat-square)](https://github.com/Mariusthvdb/custom-attributes)
+[![GH-release](https://img.shields.io/github/v/release/Mariusthvdb/custom-more-info.svg?style=flat-square)](https://github.com/Mariusthvdb/custom-more-info/releases)
+[![GH-downloads](https://img.shields.io/github/downloads/Mariusthvdb/custom-more-info/total?style=flat-square)](https://github.com/Mariusthvdb/custom-more-info/releases)
+[![GH-last-commit](https://img.shields.io/github/last-commit/Mariusthvdb/custom-more-info.svg?style=flat-square)](https://github.com/Mariusthvdb/custom-more-info/commits/master)
+[![GH-code-size](https://img.shields.io/github/languages/code-size/Mariusthvdb/custom-more-info.svg?color=red&style=flat-square)](https://github.com/Mariusthvdb/custom-more-info)
 
-### What is Custom attributes
+### What is Custom More-info
 
 This is a custom Plugin for Home Assistant to customize *which entity attributes are displayed* in the Dashboard on `more-info` cards.
 Moreover, if configured so that no more attributes are left to display (all attributes are filtered), the *attributes dropdown box is not rendered at all*.
 
-From now on *you* are in control of the More-info attributes. 
+Most of all, with this plugin users can customize when and when not to display the History and Logbook sections in the More-info card.
+
+From now on *you* are in control of the More-info attributes and all other sections. 
 Filter all, unfilter all, or select which to see/hide by glob, domain, device_class, or entity_id. 
 Any combination is possible!
 
-Custom attributes gives the user ultimate control over the attributes in the More-info panel.
+Custom More-info gives the user ultimate control over the More-info panel.
 
 If you want to hide the more-info panel completely, use [Kiosk-mode](https://github.com/NemesisRE/kiosk-mode), which is the ultimate tool for that and much more.
 
-Note: This replaces the existing custom-ui-more-info.js standalone script, or the more-info functionality in the original [Custom-ui](https://github.com/Mariusthvdb/custom-ui).
+Note: This superseed the existing custom-attributes plugin that focusses solely on the attributes [Custom-attributes](https://github.com/Mariusthvdb/custom-attributes).
 
 _______
 
@@ -28,14 +30,14 @@ _______
 Download and install the plugin like any other custom resource in Home Assistant.
 
 
-<a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=Mariusthvdb&repository=custom-attributes&category=plugin" target="_blank" rel="noreferrer noopener"><img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open your Home Assistant instance and open a repository inside the Home Assistant Community Store." /></a>
+<a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=Mariusthvdb&repository=custom-more-info&category=plugin" target="_blank" rel="noreferrer noopener"><img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open your Home Assistant instance and open a repository inside the Home Assistant Community Store." /></a>
 
 ## Enable
 
-To enable the plugin one needs to add the `custom_attributes` parameter to the root of the lovelace yaml file of each Dashboard:
+To enable the plugin one needs to add the `custom_more_info` parameter to the root of the lovelace yaml file of each Dashboard:
 
 ```yaml
-custom_attributes:
+custom_more_info:
    # Configuration
 ```
 
@@ -50,7 +52,7 @@ custom_attributes:
 * `unfilter_attributes`
 
 ```yaml
-custom_attributes:
+custom_more_info:
   debug: true
   filter_all: true
   unfilter_all: true
@@ -60,7 +62,7 @@ custom_attributes:
     # parameters   
 ```
 
-The parameters control which attributes should be (un)filtered in the more-info dialogs.
+The parameters control which attributes and sections should be (un)filtered in the more-info dialogs.
 
 ### Available parameters:
 
@@ -73,7 +75,7 @@ The parameters control which attributes should be (un)filtered in the more-info 
 ### All possible options:
 
 ```yaml
-custom_attributes:
+custom_more_info:
 
   debug: true/false
   filter_all: true ##
@@ -131,10 +133,10 @@ To check the complete filter that gets applied, enable `debug: true` and open an
 
 ## Examples
 
-Please find some real life examples [here](https://github.com/Mariusthvdb/custom-attributes/blob/main/EXAMPLES.md) which explains all available options in detail.
+Please find some real life examples [here](https://github.com/Mariusthvdb/custom-more-info/blob/main/EXAMPLES.md) which explains all available options in detail.
 
 
-### Result of Custom Attributes in the More-info panel
+### Result of Custom More-info
 
 **Before filtering:**
 
