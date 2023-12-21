@@ -6,7 +6,7 @@ import {
 } from 'home-assistant-query-selector';
 import {
     Lovelace,
-    CustomAttributesConfig,
+    CustomMoreInfoConfig,
     Attributes,
     Filters
 } from '@types';
@@ -26,7 +26,7 @@ console.info(
     'color: white; font-weight: bold; background: steelblue'
 );
 
-class CustomAttributes {
+class CustomMoreInfo {
 
     constructor() {
         this._selector = new HAQuerySelector();
@@ -44,7 +44,7 @@ class CustomAttributes {
     protected storeConfig(detail: OnLovelacePanelLoadDetail): void {
         detail.HA_PANEL_LOVELACE.element
             .then((lovelacePanel: Lovelace) => {
-                const config = lovelacePanel?.lovelace?.config?.custom_attributes;
+                const config = lovelacePanel?.lovelace?.config?.custom_more_info;
                 if (config) {
                     this._config = config;
                     this._debug('the config has been loaded, printing the config...');
@@ -253,7 +253,7 @@ class CustomAttributes {
     }
     
     private _selector: HAQuerySelector;
-    private _config: CustomAttributesConfig;
+    private _config: CustomMoreInfoConfig;
     private _filters: Record<string, Filters>;
 
 }
@@ -261,5 +261,5 @@ class CustomAttributes {
 // Ensure the DOM is fully loaded before running the script
 Promise.resolve(customElements.whenDefined(SELECTOR.HUI_VIEW))
 	.then(() => {
-		window.customAttributes = new CustomAttributes();
+		window.customMoreInfo = new CustomMoreInfo();
 	});

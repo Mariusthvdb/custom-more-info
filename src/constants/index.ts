@@ -1,6 +1,6 @@
-export const NAME = 'Custom-attributes';
-export const DESCRIPTION = 'Custom attributes for Home Assistant';
-export const URL = 'https://github.com/Mariusthvdb/custom-attributes';
+export const NAME = 'Custom-more-info';
+export const DESCRIPTION = 'Custom more-info for Home Assistant';
+export const URL = 'https://github.com/Mariusthvdb/custom-more-info';
 
 export enum SELECTOR {
     HUI_VIEW = 'hui-view',
