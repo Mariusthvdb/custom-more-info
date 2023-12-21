@@ -2,7 +2,7 @@
 
 ```yaml
 ##########################################################################################
-# Custom attributes configuration settings                                               #
+# Custom more-info configuration settings                                                #
 # use a config per Dashboard, and add it to the root of the yaml file like               #
 #                                                                                        #
 #      ############################################################################      #
@@ -11,7 +11,7 @@
 #      # button_card_templates: !include_dir_merge_named ../button_card_templates #      #
 #      # decluttering_templates: !include_dir_named ../decluttering_templates     #      #
 #      # kiosk_mode: !include ../kiosk-mode/kiosk-mode.yaml                       #      #
-#      # custom_attributes: !include ../custom_attributes/custom_attributes.yaml  #      #
+#      # custom_more_info: !include ../custom_more_info/custom_more_info.yaml    #      #
 #      #                                                                          #      #
 #      # views:                                                                   #      #
 #      #   - !include view_home.yaml                                              #      #
