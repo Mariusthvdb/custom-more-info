@@ -1,4 +1,4 @@
-export interface CustomAttributesClass {
+export interface CustomMoreInfoClass {
 }
 
 export interface StateObject {
@@ -26,7 +26,7 @@ export interface Filters {
     unfilter_attributes: string[];
 }
 
-export interface CustomAttributesConfig {
+export interface CustomMoreInfoConfig {
     debug?: boolean;
     filter_all?: boolean;
     unfilter_all?: boolean;
@@ -37,13 +37,13 @@ export interface CustomAttributesConfig {
 export interface Lovelace extends HTMLElement {
 	lovelace: {
         config: {
-            custom_attributes?: CustomAttributesConfig;
+            custom_more_info?: CustomMoreInfoConfig;
         };
     };
 }
 
 declare global {
     interface Window {
-        customAttributes: CustomAttributesClass;
+        customMoreInfo: CustomMoreInfoClass;
     }
 }

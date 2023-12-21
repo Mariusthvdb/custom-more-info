@@ -71,6 +71,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            custom-attributes.js
+            custom-more-info.js
           body: |
             ${{ steps.build_changelog.outputs.changelog }}

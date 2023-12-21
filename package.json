@@ -1,9 +1,9 @@
 {
-  "name": "custom-attributes",
+  "name": "custom-more-info",
   "version": "1.0.0",
-  "description": "Custom attributes for Home Assistant",
-  "main": "custom-attributes.js",
-  "repository": "git@github.com:Mariusthvdb/custom-attributes.git",
+  "description": "Custom more-info for Home Assistant",
+  "main": "custom-more-info.js",
+  "repository": "git@github.com/Mariusthvdb/custom-more-info.git",
   "author": "Mariusthvdb",
   "license": "GPL-3.0",
   "scripts": {

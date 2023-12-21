@@ -16,9 +16,9 @@ export default {
 			}
 		})
 	],
-	input: 'src/custom-attributes.ts',
+	input: 'src/custom-more-info.ts',
 	output: {
-		file: './custom-attributes.js',
+		file: './custom-more-info.js',
 		format: 'iife'
 	}
 };
