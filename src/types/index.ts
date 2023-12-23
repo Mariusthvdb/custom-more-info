@@ -51,7 +51,9 @@ export interface Lovelace extends HTMLElement {
 }
 
 export interface StateObject {
+    entity_id: string;
     attributes: {
+        device_class?: string;
         [attr: string]: unknown;
     };
 }

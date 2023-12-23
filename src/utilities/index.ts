@@ -4,16 +4,19 @@ import {
     RETRY_DELAY
 } from '@constants';
 
-const getElementName = (element: Element): string => {
+const getElementName = (element: Element | ShadowRoot): string => {
+	if (element instanceof ShadowRoot) {
+		return element.host.localName;
+	}
 	return element.localName;
 };
 
-export const styleExists = (element: Element): HTMLStyleElement => {
+export const styleExists = (element: Element | ShadowRoot): HTMLStyleElement => {
 	const name = getElementName(element);
 	return element.querySelector<HTMLStyleElement>(`#${STYLES_PREFIX}_${name}`);
 };
 
-export const addStyle = (element: Element, css: string): void => {
+export const addStyle = (element: Element | ShadowRoot, css: string): void => {
 	const name = getElementName(element);
 	let style = styleExists(element);
 	if (!style) {
@@ -24,7 +27,7 @@ export const addStyle = (element: Element, css: string): void => {
 	style.innerHTML = css;
 };
 
-export const removeStyle = (element: Element): void => {
+export const removeStyle = (element: Element | ShadowRoot): void => {
 	const name = getElementName(element);
     if (styleExists(element)) {
         element.querySelector(`#${STYLES_PREFIX}_${name}`).remove();

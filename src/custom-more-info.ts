@@ -2,7 +2,8 @@ import {
     HAQuerySelector,
     HAQuerySelectorEvent,
     OnLovelacePanelLoadDetail,
-    OnLovelaceMoreInfoDialogOpenDetail
+    OnLovelaceMoreInfoDialogOpenDetail,
+    OnLovelaceHistoryAndLogBookDialogOpenDetail
 } from 'home-assistant-query-selector';
 import {
     Lovelace,
@@ -44,7 +45,12 @@ class CustomMoreInfo {
         });
         this._selector.addEventListener(HAQuerySelectorEvent.ON_LOVELACE_MORE_INFO_DIALOG_OPEN, (event) => {
             this._debug('a more info dialog has been opened so applying customizations');
-            this.applyCustomizations(event.detail);
+            this.queryAttributes(event.detail);
+            this.queryHistoryAndLogbook(event.detail);
+		});
+        this._selector.addEventListener(HAQuerySelectorEvent.ON_LOVELACE_HISTORY_AND_LOGBOOK_DIALOG_OPEN, (event) => {
+            this._debug('a history and logbook dialog has been opened so applying customizations');
+            this.queryHistoryAndLogbook(event.detail);
 		});
         this._selector.listen();
     }
@@ -158,21 +164,9 @@ class CustomMoreInfo {
             });
     }
 
-    protected async applyCustomizations(detail: OnLovelaceMoreInfoDialogOpenDetail): Promise<void> {
+    protected async queryAttributes(detail: OnLovelaceMoreInfoDialogOpenDetail): Promise<void> {
 
-        const {
-            HA_MORE_INFO_DIALOG,
-            HA_MORE_INFO_DIALOG_INFO,
-            HA_DIALOG_CONTENT
-        } = detail;
-
-        const dialog = await HA_MORE_INFO_DIALOG.element as MoreInfoDialog;
-        const entityId = await getPromisableElement(
-            () => dialog.___entry?.entity_id,
-            (entityId: string): boolean => !!entityId
-        );
-        const domain = entityId.replace(/^(.+)\..+$/, '$1');
-        const deviceClass = dialog.___entry.original_device_class;
+        const { HA_MORE_INFO_DIALOG_INFO } = detail;
 
         HA_MORE_INFO_DIALOG_INFO
             .selector
@@ -185,20 +179,31 @@ class CustomMoreInfo {
                 if (attributes) {
                     this._debug('attributes have been found');
                     this._debug(attributes);
-                    this.applyAttributesFilters(
-                        attributes,
-                        entityId,
-                        domain,
-                        deviceClass
-                    );
+                    this.filterAttributes(attributes);
                 } else {
-                    this._debug('attributes have not been found');
+                    this._debug('this dialog doesn‘t have attributes or the attributes have not been found');
                 }
             });
+
+    }
+
+    protected async queryHistoryAndLogbook(detail: OnLovelaceMoreInfoDialogOpenDetail | OnLovelaceHistoryAndLogBookDialogOpenDetail): Promise<void> {
+
+        const {
+            HA_MORE_INFO_DIALOG,
+            HA_DIALOG_CONTENT
+        } = detail;
+
+        const dialog = await HA_MORE_INFO_DIALOG.element as MoreInfoDialog;
+        const entityId = await getPromisableElement(
+            () => dialog.___entry?.entity_id,
+            (entityId: string): boolean => !!entityId
+        );
+        const domain = entityId.replace(/^(.+)\..+$/, '$1');
+        const deviceClass = dialog.___entry.original_device_class;
             
-        HA_MORE_INFO_DIALOG_INFO
+        HA_DIALOG_CONTENT
             .selector
-            .$
             .deepQuery(
                 [
                     SELECTOR.MORE_INFO_HSTORY,
@@ -209,34 +214,25 @@ class CustomMoreInfo {
             .then((element: Element): void => {
                 this._debug('finished the task of querying the history or logbook of the dialog, the result is');
                 if (element) {
+                    const container = element.parentElement || element.getRootNode() as ShadowRoot;
                     this._debug('history or logbook have been found');
                     this._debug(element);
-                    this.applyVisibility(
-                        element.parentElement,
+                    this.hideElements(
+                        container,
                         entityId,
                         domain,
                         deviceClass
                     );
                 } else {
-                    this._debug('dialog content has not been found');
+                    this._debug('this dialog doesn‘t have history or logbook or they have not been found');
                 }
             });
             
     }
 
-    protected applyAttributesFilters(
-        attributes: Attributes,
-        entityId: string,
-        domain: string,
-        deviceClass: string | undefined
-    ): void {
+    protected filterAttributes(attributes: Attributes): void {
 
-        const filters = this.getFilters(
-            attributes.__stateObj.attributes,
-            entityId,
-            domain,
-            deviceClass
-        );
+        const filters = this.getFilters(attributes);
         const finalFilters = filters.filter_attributes.filter((filter: string) => !filters.unfilter_attributes.includes(filter));
         const extraFilters = attributes.extraFilters || '';
         const separator = extraFilters.length
@@ -261,8 +257,8 @@ class CustomMoreInfo {
         
     }
 
-    protected applyVisibility(
-        container: Element,
+    protected hideElements(
+        container: Element | ShadowRoot,
         entityId: string,
         domain: string,
         deviceClass: string | undefined
@@ -291,12 +287,11 @@ class CustomMoreInfo {
 
     }
 
-    protected getFilters(
-        attributes: Record<string, unknown>,
-        entityId: string,
-        domain: string,
-        deviceClass: string | undefined
-    ): InternalFilters {
+    protected getFilters(attributes: Attributes): InternalFilters {
+
+        const entityId = attributes.__stateObj.entity_id;
+        const deviceClass = attributes.__stateObj.attributes.device_class;
+        const domain = entityId.replace(/^(.+)\..+$/, '$1');
 
         this._debug(`getting the filters for ${entityId}`);
 
