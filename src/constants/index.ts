@@ -2,9 +2,15 @@ export const NAME = 'Custom-more-info';
 export const DESCRIPTION = 'Custom more-info for Home Assistant';
 export const URL = 'https://github.com/Mariusthvdb/custom-more-info';
 
+export const STYLES_PREFIX = 'custom_more_info';
+export const MAX_ATTEMPTS = 500;
+export const RETRY_DELAY = 50;
+
 export enum SELECTOR {
     HUI_VIEW = 'hui-view',
     MORE_INFO_CONTENT = 'more-info-content',
+    MORE_INFO_HSTORY = 'ha-more-info-history',
+    MORE_INFO_LOGBOOK = 'ha-more-info-logbook',
     HA_ATTRIBUTES = 'ha-attributes'
 }
 
