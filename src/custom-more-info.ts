@@ -341,14 +341,14 @@ class CustomMoreInfo {
         if (this._config?.filter_all || filters.has(ALL_FILTER)) {
             this._addSetValues(
                 filters,
-                Object.keys(attributes)
+                Object.keys(attributes.__stateObj.attributes)
             );
         }
 
         if (this._config?.unfilter_all || unFilters.has(ALL_FILTER)) {
             this._addSetValues(
                 unFilters,
-                Object.keys(attributes)
+                Object.keys(attributes.__stateObj.attributes)
             );
         }
 
