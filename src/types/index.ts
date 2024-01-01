@@ -1,30 +1,24 @@
 export interface CustomMoreInfoClass {
 }
 
-export interface StateObject {
-    attributes: {
-        device_class?: string;
-        [attr: string]: unknown;
-    },
-    entity_id: string;
+export enum BY_TYPES {
+    by_entity_id,
+    by_domain,
+    by_device_class,
+    by_glob
 }
 
-export interface Attributes extends Element {
-    extraFilters: string | undefined;
-    __stateObj: StateObject;
-}
+export type ByTypes = keyof typeof BY_TYPES;
 
-export interface AttributeFilters {
-    by_entity_id?: Record<string, string[]>;
-    by_domain: Record<string, string[]>;
-    by_device_class?: Record<string, string[]>;
-    by_glob: Record<string, string[]>;
-}
+export type AttributeFilters = Record<
+    ByTypes,
+    Record<string, string[]>
+>;
 
-export interface Filters {
-    filter_attributes: string[];
-    unfilter_attributes: string[];
-}
+export type ElementsVisibility = Record<
+    ByTypes,
+    string[]
+>;
 
 export interface CustomMoreInfoConfig {
     debug?: boolean;
@@ -32,6 +26,20 @@ export interface CustomMoreInfoConfig {
     unfilter_all?: boolean;
     filter_attributes?: AttributeFilters;   
     unfilter_attributes?: AttributeFilters;
+    hide_history?: ElementsVisibility;
+    hide_logbook?: ElementsVisibility;
+    unhide_history?: ElementsVisibility;
+    unhide_logbook?: ElementsVisibility;
+}
+
+export interface InternalFilters {
+    filter_attributes: string[];
+    unfilter_attributes: string[];
+}
+
+export interface InternalVisibility {
+    hide_history: boolean;
+    hide_logbook: boolean;
 }
 
 export interface Lovelace extends HTMLElement {
@@ -39,6 +47,26 @@ export interface Lovelace extends HTMLElement {
         config: {
             custom_more_info?: CustomMoreInfoConfig;
         };
+    };
+}
+
+export interface StateObject {
+    entity_id: string;
+    attributes: {
+        device_class?: string;
+        [attr: string]: unknown;
+    };
+}
+
+export interface Attributes extends Element {
+    extraFilters: string | undefined;
+    __stateObj: StateObject;
+}
+
+export interface MoreInfoDialog extends HTMLElement {
+    ___entry: {
+        entity_id: string;
+        original_device_class?: string;
     };
 }
 
