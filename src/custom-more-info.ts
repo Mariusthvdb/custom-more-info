@@ -39,16 +39,16 @@ class CustomMoreInfo {
 
     constructor() {
         this._selector = new HAQuerySelector();
-        this._selector.addEventListener(HAQuerySelectorEvent.ON_LOVELACE_PANEL_LOAD, (event) => {
+        this._selector.addEventListener(HAQuerySelectorEvent.ON_PANEL_LOAD, (event) => {
             this._debug('lovelace panel has been rendered so loading the configuration');
             this.storeConfig(event.detail);
         });
-        this._selector.addEventListener(HAQuerySelectorEvent.ON_LOVELACE_MORE_INFO_DIALOG_OPEN, (event) => {
+        this._selector.addEventListener(HAQuerySelectorEvent.ON_MORE_INFO_DIALOG_OPEN, (event) => {
             this._debug('a more info dialog has been opened so applying customizations');
             this.queryAttributes(event.detail);
             this.queryHistoryAndLogbook(event.detail);
 		});
-        this._selector.addEventListener(HAQuerySelectorEvent.ON_LOVELACE_HISTORY_AND_LOGBOOK_DIALOG_OPEN, (event) => {
+        this._selector.addEventListener(HAQuerySelectorEvent.ON_HISTORY_AND_LOGBOOK_DIALOG_OPEN, (event) => {
             this._debug('a history and logbook dialog has been opened so applying customizations');
             this.queryHistoryAndLogbook(event.detail);
 		});
