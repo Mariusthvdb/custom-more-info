@@ -1,6 +1,13 @@
 export interface CustomMoreInfoClass {
 }
 
+export interface HomeAssistant extends HTMLElement {
+	hass: {
+        language: string;
+        resources: Record<string, Record<string, string>>;
+    };
+}
+
 export enum BY_TYPES {
     by_entity_id,
     by_domain,
@@ -30,6 +37,9 @@ export interface CustomMoreInfoConfig {
     hide_logbook?: ElementsVisibility;
     unhide_history?: ElementsVisibility;
     unhide_logbook?: ElementsVisibility;
+    hide_header_history?: ElementsVisibility;
+    unhide_header_history?: ElementsVisibility;
+    auto_hide_header_history?: boolean;
 }
 
 export interface InternalFilters {
@@ -40,6 +50,7 @@ export interface InternalFilters {
 export interface InternalVisibility {
     hide_history: boolean;
     hide_logbook: boolean;
+    hide_header_history: boolean;
 }
 
 export interface Lovelace extends HTMLElement {

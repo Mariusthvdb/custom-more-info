@@ -1,7 +1,10 @@
+import { HomeAssistant } from '@types';
 import {
     STYLES_PREFIX,
     MAX_ATTEMPTS,
-    RETRY_DELAY
+    RETRY_DELAY,
+	SELECTOR,
+	MENU_REFERENCES
 } from '@constants';
 
 const getElementName = (element: Element | ShadowRoot): string => {
@@ -60,5 +63,70 @@ export const getPromisableElement = <T>(
 			}
 		};
 		select();
+	});
+};
+
+const getHAResources = (ha: HomeAssistant): Promise<Record<string, Record<string, string>>> => {
+	let attempts = 0;
+	const referencePaths = Object.values(MENU_REFERENCES);
+	return new Promise((resolve, reject) => {
+		const getResources = () => {
+			const resources = ha?.hass?.resources;
+			let success = false;
+			if (resources) {
+				const language = ha.hass.language;
+				// check if all the resources are available
+				const anyEmptyResource = referencePaths.find((path: string) => {
+					if (resources[language][path]) {
+						return false;
+					}
+					return true;
+				});
+				if (!anyEmptyResource) {
+					success = true;
+				}
+			}
+			if (success) {
+				resolve(resources);
+			} else {
+				attempts++;
+				if (attempts < MAX_ATTEMPTS) {
+					setTimeout(getResources, RETRY_DELAY);
+				} else {
+					reject();
+				}
+			}
+		};
+		getResources();
+	});
+};
+
+export const getTranslations = async(
+	ha: HomeAssistant
+): Promise<Record<string, string>> => {
+	const resources = await getHAResources(ha);
+	const language = ha.hass.language;
+	const resourcesTranslated = resources[language];
+	const entries = Object.entries(MENU_REFERENCES);
+	const menuTranslationsEntries = entries.map((entry: [string, string]) => {
+		const [reference, prop] = entry;
+		return [resourcesTranslated[prop], reference];
+	});
+	return Object.fromEntries(menuTranslationsEntries);
+};
+
+export const addDataSelectors = (
+	items: NodeListOf<HTMLElement>,
+	translations: Record<string, string>
+): void => {
+	items.forEach((item: HTMLElement): void => {
+		if (
+			item &&
+			item.dataset &&
+			!item.dataset.customSelector
+		) {
+			const icon = item.shadowRoot.querySelector<HTMLElement>(SELECTOR.MENU_ITEM_ICON);
+			item.dataset.customSelector = translations[icon.title];
+		}
 	});
 };

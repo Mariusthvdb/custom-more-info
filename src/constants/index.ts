@@ -9,10 +9,35 @@ export const RETRY_DELAY = 50;
 export enum SELECTOR {
     HUI_VIEW = 'hui-view',
     MORE_INFO_CONTENT = 'more-info-content',
-    MORE_INFO_HSTORY = 'ha-more-info-history',
+    MORE_INFO_HISTORY = 'ha-more-info-history',
     MORE_INFO_LOGBOOK = 'ha-more-info-logbook',
-    HA_ATTRIBUTES = 'ha-attributes'
+    HA_ATTRIBUTES = 'ha-attributes',
+    MENU_ITEM = 'ha-icon-button',
+    MENU_ITEM_ICON = 'mwc-icon-button',
+    MORE_INFO_HEADER = 'ha-dialog-header',
+    MORE_INFO_HEADER_HISTORY = 'ha-icon-button[data-custom-selector="DIALOG_HISTORY"]'
 }
+
+export enum MENU {
+    SEARCH = 'SEARCH',
+    ASSIST = 'ASSIST',
+    REFRESH = 'REFRESH',
+    UNUSED_ENTITIES = 'UNUSED_ENTITIES',
+    RELOAD_RESOURCES = 'RELOAD_RESOURCES',
+    EDIT_DASHBOARD = 'EDIT_DASHBOARD',
+    DIALOG_DISMISS = 'DIALOG_DISMISS',
+    DIALOG_HISTORY = 'DIALOG_HISTORY',
+    DIALOG_SETTINGS = 'DIALOG_SETTINGS'
+}
+
+const UI_PREFIX = 'ui';
+const DIALOGS_PREFIX = `${UI_PREFIX}.dialogs.more_info_control`;
+
+export const MENU_REFERENCES = Object.freeze({
+	[MENU.DIALOG_HISTORY]: `${DIALOGS_PREFIX}.history`,
+	[MENU.DIALOG_SETTINGS]: `${DIALOGS_PREFIX}.settings`,
+	[MENU.DIALOG_DISMISS]: `${DIALOGS_PREFIX}.dismiss`
+});
 
 export const ESCAPE_REG_EXP = /[.?+^$[\]\\(){}|-]/g;
 
