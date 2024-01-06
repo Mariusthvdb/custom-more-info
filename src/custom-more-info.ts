@@ -12,7 +12,8 @@ import {
     InternalFilters,
     InternalVisibility,
     MoreInfoDialog,
-    HomeAssistant
+    HomeAssistant,
+    ElementsVisibility
 } from '@types';
 import {
     NAME,
@@ -104,6 +105,21 @@ class CustomMoreInfo {
         values.forEach((value: string): void => {
             set.add(value);
         });
+    }
+
+    private _anyVisbilityMatch(
+        parameter: ElementsVisibility | undefined,
+        entityId: string,
+        deviceClass: string,
+        domain: string
+    ): boolean {
+        return (
+            this._anyGlobMatch(entityId, parameter?.by_glob) ||
+            parameter?.by_device_class?.includes(deviceClass) ||
+            parameter?.by_domain?.includes(domain) ||
+            parameter?.by_entity_id?.includes(entityId) ||
+            parameter?.[ALL_FILTER]
+        );
     }
 
     private _debug(message: unknown): void {
@@ -231,8 +247,8 @@ class CustomMoreInfo {
                 if (header) {
                     this._debug('finished the task of querying the header, the result is');
                     this._debug(header);
-                    this._addDataSelectors(header);
-                    this._hideHeaderElements(header, visibility);
+                    this.addDataSelectors(header);
+                    this.hideHeaderElements(header, visibility);
                 } else {
                     this._debug('this dialog doesn‘t have a header or it has not been found');
                 }
@@ -313,14 +329,14 @@ class CustomMoreInfo {
 
     }
 
-    protected _addDataSelectors(header: Element): void {
+    protected addDataSelectors(header: Element): void {
         addDataSelectors(
             header.querySelectorAll(SELECTOR.MENU_ITEM),
             this._translations
         );
     }
 
-    protected _hideHeaderElements(
+    protected hideHeaderElements(
         content: Element,
         visibility: InternalVisibility
     ): void {
@@ -330,8 +346,8 @@ class CustomMoreInfo {
             return;
         }
 
-        if (visibility.hide_header_history) {
-            addStyle(content, getHiddenStyle(SELECTOR.MORE_INFO_HEADER_HISTORY));
+        if (visibility.hide_header_history_icon) {
+            addStyle(content, getHiddenStyle(SELECTOR.MORE_INFO_HEADER_HISTORY_ICON));
         } else {
             removeStyle(content);
         }
@@ -431,69 +447,81 @@ class CustomMoreInfo {
         const hide = {
             history: false,
             logbook: false,
-            header_history: false
+            header_history_icon: false
         };
 
         if (
-            this._anyGlobMatch(entityId, this._config?.hide_history?.by_glob) ||
-            this._config?.hide_history?.by_device_class?.includes(deviceClass) ||
-            this._config?.hide_history?.by_domain?.includes(domain) ||
-            this._config?.hide_history?.by_entity_id?.includes(entityId)
+            this._anyVisbilityMatch(
+                this._config?.hide_history,
+                entityId,
+                deviceClass,
+                domain
+            )
         ) {
             hide.history = true;
         }
 
         if (
-            this._anyGlobMatch(entityId, this._config?.unhide_history?.by_glob) ||
-            this._config?.unhide_history?.by_device_class?.includes(deviceClass) ||
-            this._config?.unhide_history?.by_domain?.includes(domain) ||
-            this._config?.unhide_history?.by_entity_id?.includes(entityId)
+            this._anyVisbilityMatch(
+                this._config?.unhide_history,
+                entityId,
+                deviceClass,
+                domain
+            )
         ) {
             hide.history = false;
         }
 
         if (
-            this._anyGlobMatch(entityId, this._config?.hide_logbook?.by_glob) ||
-            this._config?.hide_logbook?.by_device_class?.includes(deviceClass) ||
-            this._config?.hide_logbook?.by_domain?.includes(domain) ||
-            this._config?.hide_logbook?.by_entity_id?.includes(entityId)
+            this._anyVisbilityMatch(
+                this._config?.hide_logbook,
+                entityId,
+                deviceClass,
+                domain
+            )
         ) {
             hide.logbook = true;
         }
 
         if (
-            this._anyGlobMatch(entityId, this._config?.unhide_logbook?.by_glob) ||
-            this._config?.unhide_logbook?.by_device_class?.includes(deviceClass) ||
-            this._config?.unhide_logbook?.by_domain?.includes(domain) ||
-            this._config?.unhide_logbook?.by_entity_id?.includes(entityId)
+            this._anyVisbilityMatch(
+                this._config?.unhide_logbook,
+                entityId,
+                deviceClass,
+                domain
+            )
         ) {
             hide.logbook = false;
         }
 
         if (
-            this._anyGlobMatch(entityId, this._config?.hide_header_history?.by_glob) ||
-            this._config?.hide_header_history?.by_device_class?.includes(deviceClass) ||
-            this._config?.hide_header_history?.by_domain?.includes(domain) ||
-            this._config?.hide_header_history?.by_entity_id?.includes(entityId)
+            this._anyVisbilityMatch(
+                this._config?.hide_header_history_icon,
+                entityId,
+                deviceClass,
+                domain
+            )
         ) {
-            hide.header_history = true;
+            hide.header_history_icon = true;
         }
 
         if (
-            this._anyGlobMatch(entityId, this._config?.unhide_header_history?.by_glob) ||
-            this._config?.unhide_header_history?.by_device_class?.includes(deviceClass) ||
-            this._config?.unhide_header_history?.by_domain?.includes(domain) ||
-            this._config?.unhide_header_history?.by_entity_id?.includes(entityId)
+            this._anyVisbilityMatch(
+                this._config?.unhide_header_history_icon,
+                entityId,
+                deviceClass,
+                domain
+            )
         ) {
-            hide.header_history = false;
+            hide.header_history_icon = false;
         }
 
         this._visibility[entityId] = {
             hide_history: hide.history,
             hide_logbook: hide.logbook,
-            hide_header_history: hide.header_history ||
+            hide_header_history_icon: hide.header_history_icon ||
             (
-                !!this._config?.auto_hide_header_history &&
+                !!this._config?.auto_hide_header_history_icon &&
                 hide.history &&
                 hide.logbook
             )

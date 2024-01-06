@@ -25,7 +25,9 @@ export type AttributeFilters = Record<
 export type ElementsVisibility = Record<
     ByTypes,
     string[]
->;
+> & {
+    all?: boolean;
+};
 
 export interface CustomMoreInfoConfig {
     debug?: boolean;
@@ -37,9 +39,9 @@ export interface CustomMoreInfoConfig {
     hide_logbook?: ElementsVisibility;
     unhide_history?: ElementsVisibility;
     unhide_logbook?: ElementsVisibility;
-    hide_header_history?: ElementsVisibility;
-    unhide_header_history?: ElementsVisibility;
-    auto_hide_header_history?: boolean;
+    hide_header_history_icon?: ElementsVisibility;
+    unhide_header_history_icon?: ElementsVisibility;
+    auto_hide_header_history_icon?: boolean;
 }
 
 export interface InternalFilters {
@@ -50,7 +52,7 @@ export interface InternalFilters {
 export interface InternalVisibility {
     hide_history: boolean;
     hide_logbook: boolean;
-    hide_header_history: boolean;
+    hide_header_history_icon: boolean;
 }
 
 export interface Lovelace extends HTMLElement {
