@@ -153,6 +153,29 @@ To check the complete filter that gets applied, enable `debug: true` and open an
 
 Please find some real life examples [here](https://github.com/Mariusthvdb/custom-more-info/blob/main/EXAMPLES.md) which explains all available options in detail.
 
+## Prevent More-info completely
+
+This plugin is for customizing the more-info panel. If you want to prevent the More-info from popping up completely, you can do so using card-mod stylings:
+
+```yaml
+card_mod:
+  style:
+    hui-generic-entity-row $: |
+      state-badge {
+        pointer-events: none;
+      }
+```
+which would prevent the pop-up when clicking the icon, but still allows interaction on a dropdown, eg when using an input_select entity.
+Preventing the more-info completely can be done with:
+
+```yaml
+card_mod:
+  style: |
+    :host {
+       pointer-events: none;
+    }
+```
+
 
 ### Result of Custom More-info
 
