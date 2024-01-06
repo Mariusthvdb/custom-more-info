@@ -227,11 +227,11 @@ class CustomMoreInfo {
 
         const dialog = await HA_MORE_INFO_DIALOG.element as MoreInfoDialog;
         const entityId = await getPromisableElement(
-            () => dialog.___entry?.entity_id,
+            () => dialog.___entry?.entity_id || dialog.___entityId,
             (entityId: string): boolean => !!entityId
         );
         const domain = entityId.replace(/^(.+)\..+$/, '$1');
-        const deviceClass = dialog.___entry.original_device_class;
+        const deviceClass = dialog.___entry?.original_device_class || '';
 
         const visibility = this.getVisibility(
             entityId,

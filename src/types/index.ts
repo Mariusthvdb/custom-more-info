@@ -77,10 +77,11 @@ export interface Attributes extends Element {
 }
 
 export interface MoreInfoDialog extends HTMLElement {
-    ___entry: {
+    ___entry?: {
         entity_id: string;
         original_device_class?: string;
     };
+    ___entityId: string;
 }
 
 declare global {
