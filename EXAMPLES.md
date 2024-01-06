@@ -11,7 +11,7 @@
 #      # button_card_templates: !include_dir_merge_named ../button_card_templates #      #
 #      # decluttering_templates: !include_dir_named ../decluttering_templates     #      #
 #      # kiosk_mode: !include ../kiosk-mode/kiosk-mode.yaml                       #      #
-#      # custom_more_info: !include ../custom_more_info/custom_more_info.yaml    #      #
+#      # custom_more_info: !include ../custom_more_info/custom_more_info.yaml     #      #
 #      #                                                                          #      #
 #      # views:                                                                   #      #
 #      #   - !include view_home.yaml                                              #      #
@@ -21,10 +21,70 @@
 #                                                                                        #
 ##########################################################################################
 
-# use the available 'debug' paramater if a filter does not work and you need to report
+# use the available 'debug' parameter if a filter does not work and you need to report
 # malfunctioning to the issue tracker.
 
 debug: true
+
+##########################################################################################
+# Control the history icon in the header                                                 #
+##########################################################################################
+
+auto_hide_header_history_icon: true
+
+hide_header_history_icon:
+
+  by_domain:
+    - input_datetime
+    - automation
+    - script
+    - cover
+    - group
+
+  by_entity_id:
+    - sun.sun
+
+##########################################################################################
+# Control History section                                                                #
+##########################################################################################
+
+hide_history:
+  by_entity_id:
+     - binary_sensor.ongemeten_verbruik_te_hoog
+     - sensor.ha_main_config
+
+  by_domain:
+    - input_select
+    - select
+    - input_boolean
+    - number
+
+  by_device_class:
+    - sound
+
+  by_glob:
+    - 'siren.*'
+    - 'input_number.*'
+
+##########################################################################################
+# Control Logbook section                                                                #
+##########################################################################################
+
+hide_logbook:
+
+  by_entity_id:
+    - binary_sensor.ongemeten_verbruik_te_hoog
+    - binary_sensor.power_using_off_switches
+
+  by_domain:
+    - input_select
+    - select
+    - input_boolean
+    - number
+    - device_tracker
+
+  by_device_class:
+    - sound
 
 ##########################################################################################
 # Unfilter                                                                               #
