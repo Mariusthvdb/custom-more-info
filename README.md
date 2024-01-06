@@ -47,7 +47,7 @@ Available configuration options:
 
 * `debug`
 
-* `auto_hide_header_history_icon
+* `auto_hide_header_history_icon`
 * `hide_header_history_icon`
 * `unhide_header_history_icon`
 
