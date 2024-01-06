@@ -83,7 +83,7 @@ The parameters control which attributes and sections should be (un)filtered in t
 
 ### Available parameters:
 
-4 'by' parameters alowing detailed customization on various levels, requiring an array of attributes
+4 'by' parameters allowing detailed customization on various levels, requiring an array of attributes
 * `by_entity_id`
 * `by_domain`
 * `by_device_class`
