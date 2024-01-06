@@ -43,9 +43,19 @@ custom_more_info:
 
 ## Configuration options
 
-5 configuration options available:
+Available configuration options:
 
 * `debug`
+
+* `auto_hide_header_history_icon
+* `hide_header_history_icon`
+* `unhide_header_history_icon`
+
+* `hide_history`
+* `unhide_history`
+* `hide_logbook`
+* `unhide_logbook`
+
 * `filter_all`
 * `unfilter_all`
 * `filter_attributes`
@@ -54,6 +64,13 @@ custom_more_info:
 ```yaml
 custom_more_info:
   debug: true
+
+  auto_hide_header_history_icon: true
+  hide_header_history_icon:
+    # parameters
+  hide_header_history_icon:
+    # parameters
+
   filter_all: true
   unfilter_all: true
   filter_attributes:
