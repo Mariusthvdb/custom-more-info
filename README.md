@@ -143,6 +143,15 @@ filter_attributes:
 ```
 and here, will filter all attributes on all Domain Light more-info panels.
 
+For the header-history-icon we also have a special all setting:
+
+```yaml
+custom_more_info:
+  ## The same with unhide_header_history_icon , hide_history, hide_logbook, unhide_history, and unhide_logbook 
+  hide_header_history_icon:
+    all: true
+```
+
 ### Filter merge
 
 Finally, all configured filters are merged.
