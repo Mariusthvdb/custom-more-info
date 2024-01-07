@@ -20,9 +20,9 @@ Any combination is possible!
 
 Custom More-info gives the user ultimate control over the More-info panel.
 
-If you want to hide the more-info panel completely, use [Kiosk-mode](https://github.com/NemesisRE/kiosk-mode), which is the ultimate tool for that and much more.
+If you want to hide the more-info panel completely, use [Kiosk-mode](https://github.com/NemesisRE/kiosk-mode), which is the ultimate tool for that and much more. Or check [this card-mod mod](https://github.com/Mariusthvdb/custom-more-info#prevent-more-info-completely) for preventing the more-info in individual entities.
 
-Note: This superseed the existing custom-attributes plugin that focusses solely on the attributes [Custom-attributes](https://github.com/Mariusthvdb/custom-attributes).
+Note: This superseeds the existing custom-attributes plugin that focusses solely on the attributes [Custom-attributes](https://github.com/Mariusthvdb/custom-attributes).
 
 _______
 
