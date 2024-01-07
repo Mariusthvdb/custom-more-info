@@ -143,7 +143,7 @@ filter_attributes:
 ```
 and here, will filter all attributes on all Domain Light more-info panels.
 
-For the header-history-icon we also have a special all setting:
+For the header-history-icon we also have a special `all` setting:
 
 ```yaml
 custom_more_info:
