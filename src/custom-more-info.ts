@@ -517,7 +517,7 @@ class CustomMoreInfo {
 
         if (
             this._anyVisbilityMatch(
-                this._config?.hide_all,
+                this._config?.hide_history_logbook,
                 entityId,
                 deviceClass,
                 domain
@@ -529,7 +529,7 @@ class CustomMoreInfo {
 
         if (
             this._anyVisbilityMatch(
-                this._config?.unhide_all,
+                this._config?.unhide_history_logbook,
                 entityId,
                 deviceClass,
                 domain

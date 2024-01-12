@@ -33,8 +33,8 @@ export interface CustomMoreInfoConfig {
     unfilter_all?: boolean;
     filter_attributes?: AttributeFilters;   
     unfilter_attributes?: AttributeFilters;
-    hide_all?: ElementsVisibility;
-    unhide_all?: ElementsVisibility;
+    hide_history_logbook?: ElementsVisibility;
+    unhide_history_logbook?: ElementsVisibility;
     hide_history?: ElementsVisibility;
     hide_logbook?: ElementsVisibility;
     unhide_history?: ElementsVisibility;
