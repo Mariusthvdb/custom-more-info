@@ -25,9 +25,7 @@ export type AttributeFilters = Record<
 export type ElementsVisibility = Record<
     ByTypes,
     string[]
-> & {
-    all?: boolean;
-};
+>;
 
 export interface CustomMoreInfoConfig {
     debug?: boolean;
@@ -35,6 +33,8 @@ export interface CustomMoreInfoConfig {
     unfilter_all?: boolean;
     filter_attributes?: AttributeFilters;   
     unfilter_attributes?: AttributeFilters;
+    hide_history_logbook?: ElementsVisibility;
+    unhide_history_logbook?: ElementsVisibility;
     hide_history?: ElementsVisibility;
     hide_logbook?: ElementsVisibility;
     unhide_history?: ElementsVisibility;

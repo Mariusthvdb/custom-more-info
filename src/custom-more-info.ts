@@ -117,8 +117,7 @@ class CustomMoreInfo {
             this._anyGlobMatch(entityId, parameter?.by_glob) ||
             parameter?.by_device_class?.includes(deviceClass) ||
             parameter?.by_domain?.includes(domain) ||
-            parameter?.by_entity_id?.includes(entityId) ||
-            parameter?.[ALL_FILTER]
+            parameter?.by_entity_id?.includes(entityId)
         );
     }
 
@@ -514,6 +513,30 @@ class CustomMoreInfo {
             )
         ) {
             hide.header_history_icon = false;
+        }
+
+        if (
+            this._anyVisbilityMatch(
+                this._config?.hide_history_logbook,
+                entityId,
+                deviceClass,
+                domain
+            )
+        ) {
+            hide.history = true;
+            hide.logbook = true;
+        }
+
+        if (
+            this._anyVisbilityMatch(
+                this._config?.unhide_history_logbook,
+                entityId,
+                deviceClass,
+                domain
+            )
+        ) {
+            hide.history = false;
+            hide.logbook = false;
         }
 
         this._visibility[entityId] = {
