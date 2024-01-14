@@ -1,6 +1,6 @@
 {
   "name": "custom-more-info",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Custom more-info for Home Assistant",
   "main": "custom-more-info.js",
   "repository": "git@github.com/Mariusthvdb/custom-more-info.git",
