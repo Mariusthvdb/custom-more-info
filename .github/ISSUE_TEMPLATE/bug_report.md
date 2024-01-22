@@ -22,15 +22,8 @@ A clear and concise description of what the bug is.
     ]
 }
 ```
-**Custom-attributes Version:**
+**Custom-more-info Version:**
 1.0.0
-
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.
@@ -53,7 +46,7 @@ We cant help you without that exact info
  - Browser [e.g. stock browser, safari]
  - Version [e.g. 22]
 
-**The custom-attributes configuration**
+**The custom-more-info configuration**
 ```yaml
 filter_attributes:
   by_glob:
