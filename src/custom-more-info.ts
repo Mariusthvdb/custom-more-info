@@ -21,7 +21,9 @@ import {
     SELECTOR,
     ESCAPE_REG_EXP,
     ALL_FILTER,
-    IGNORED_ATTRIBUTES
+    IGNORED_ATTRIBUTES,
+    MAX_ATTEMPTS,
+    RETRY_DELAY
 } from '@constants';
 import {
     addStyle,
@@ -37,8 +39,8 @@ class CustomMoreInfo {
 
     constructor() {
         this._selector = new HAQuerySelector({
-            retries: 5,
-            delay: 500
+            retries: MAX_ATTEMPTS,
+            delay: RETRY_DELAY
         });
         this._selector.addEventListener(HAQuerySelectorEvent.ON_LOVELACE_PANEL_LOAD, (event) => {
             this.storeConfig(event.detail);

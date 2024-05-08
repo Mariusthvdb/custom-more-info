@@ -3,8 +3,8 @@ export const DESCRIPTION = 'Custom more-info for Home Assistant';
 export const URL = 'https://github.com/Mariusthvdb/custom-more-info';
 
 export const STYLES_PREFIX = 'custom_more_info';
-export const MAX_ATTEMPTS = 500;
-export const RETRY_DELAY = 50;
+export const MAX_ATTEMPTS = 100;
+export const RETRY_DELAY = 10;
 
 export enum SELECTOR {
     HUI_VIEW = 'hui-view',

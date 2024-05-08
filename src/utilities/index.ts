@@ -51,7 +51,7 @@ export const getPromisableElement = <T>(
 		let attempts = 0;
 		const select = () => {
 			const element: T = getElement();
-			if (element && check(element)) {
+			if (check(element)) {
 				resolve(element);
 			} else {
 				attempts++;
