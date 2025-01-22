@@ -10,16 +10,17 @@ import {
     CustomMoreInfoConfig,
     Attributes,
     InternalFilters,
-    InternalVisibility,
+    InternalConfig,
     MoreInfoDialog,
     HomeAssistant,
-    ElementsVisibility
+    ConditionalFilter
 } from '@types';
 import {
     NAME,
     DESCRIPTION,
     SELECTOR,
     ESCAPE_REG_EXP,
+    DOMAIN_REG_EXP,
     ALL_FILTER,
     IGNORED_ATTRIBUTES,
     MAX_ATTEMPTS,
@@ -48,11 +49,11 @@ class CustomMoreInfo {
         this._selector.addEventListener(HAQuerySelectorEvent.ON_MORE_INFO_DIALOG_OPEN, (event) => {
             this._debug('a more info dialog has been opened so applying customizations');
             this.queryAttributes(event.detail);
-            this.queryHistoryAndLogbook(event.detail);
+            this.queryDialogElements(event.detail);
 		});
         this._selector.addEventListener(HAQuerySelectorEvent.ON_HISTORY_AND_LOGBOOK_DIALOG_OPEN, (event) => {
             this._debug('a history and logbook dialog has been opened so applying customizations');
-            this.queryHistoryAndLogbook(event.detail);
+            this.queryDialogElements(event.detail);
 		});
         this._selector.listen();
     }
@@ -60,7 +61,7 @@ class CustomMoreInfo {
     private _selector: HAQuerySelector;
     private _config: CustomMoreInfoConfig;
     private _filters: Record<string, InternalFilters>;
-    private _visibility: Record<string, InternalVisibility>;
+    private _conditionalConfig: Record<string, InternalConfig>;
     private _translations: Record<string, string>;
 
     private _insertAttributesGlobs(
@@ -96,6 +97,24 @@ class CustomMoreInfo {
         );
     }
 
+    private _getDialogEntityId(dialog: MoreInfoDialog): Promise<string> {
+        return getPromisableElement(
+            () => dialog.___entry?.entity_id || dialog.___entityId,
+            (entityId: string): boolean => !!entityId
+        );
+    }
+
+    private _getDialogDeviceClass(dialog: MoreInfoDialog): Promise<string> {
+        return getPromisableElement(
+            () => dialog.___entry?.original_device_class,
+            (deviceClass: string | null): boolean => deviceClass === null || typeof deviceClass === 'string'
+        );
+    }
+
+    private _getDomain(entityId: string): string {
+        return entityId.replace(DOMAIN_REG_EXP, '$1');
+    }
+
     private _getEntityIdRegExp(glob: string): RegExp {
         const regExpString = glob
             .replace(ESCAPE_REG_EXP, '\\$&')
@@ -109,8 +128,8 @@ class CustomMoreInfo {
         });
     }
 
-    private _anyVisbilityMatch(
-        parameter: ElementsVisibility | undefined,
+    private _anyConfigMatch(
+        parameter: ConditionalFilter | undefined,
         entityId: string,
         deviceClass: string,
         domain: string
@@ -176,7 +195,7 @@ class CustomMoreInfo {
                     this._debug('this dashboard doesn‘t contain a config but there is a previous one in memory...');
                 }
                 this._filters = {};
-                this._visibility = {};
+                this._conditionalConfig = {};
                 this._debug(this._config);
             })
             .finally(() => {
@@ -218,7 +237,7 @@ class CustomMoreInfo {
 
     }
 
-    protected async queryHistoryAndLogbook(detail: OnMoreInfoDialogOpenDetail | OnHistoryAndLogBookDialogOpenDetail): Promise<void> {
+    protected async queryDialogElements(detail: OnMoreInfoDialogOpenDetail | OnHistoryAndLogBookDialogOpenDetail): Promise<void> {
 
         const {
             HA_DIALOG,
@@ -227,21 +246,19 @@ class CustomMoreInfo {
         } = detail;
 
         const dialog = await HA_MORE_INFO_DIALOG.element as MoreInfoDialog;
-        const entityId = await getPromisableElement(
-            () => dialog.___entry?.entity_id || dialog.___entityId,
-            (entityId: string): boolean => !!entityId
-        );
-        const deviceClass = await getPromisableElement(
-            () => dialog.___entry?.original_device_class,
-            (deviceClass: string | null): boolean => deviceClass === null || typeof deviceClass === 'string'
-        );
-        const domain = entityId.replace(/^(.+)\..+$/, '$1');
+        const entityId = await this._getDialogEntityId(dialog);
+        const deviceClass = await this._getDialogDeviceClass(dialog);
+        const domain = this._getDomain(entityId);
 
-        const visibility = this.getVisibility(
+        const internalConfig = this.getInternalConfig(
             entityId,
             domain,
             deviceClass || ''
         );
+
+        if (internalConfig.maximized_size) {
+            dialog.large = true;
+        }
 
         HA_DIALOG
             .selector
@@ -252,7 +269,7 @@ class CustomMoreInfo {
                     this._debug('finished the task of querying the header, the result is');
                     this._debug(header);
                     this.addDataSelectors(header);
-                    this.hideHeaderElements(header, visibility);
+                    this.processHeaderElements(header, internalConfig);
                 } else {
                     this._debug('this dialog doesn‘t have a header or it has not been found');
                 }
@@ -273,7 +290,7 @@ class CustomMoreInfo {
                     const container = element.parentElement || element.getRootNode() as ShadowRoot;
                     this._debug('history or logbook have been found');
                     this._debug(element);
-                    this.hideContentElements(container, visibility);
+                    this.processContentElements(container, internalConfig);
                 } else {
                     this._debug('this dialog doesn‘t have history or logbook or they have not been found.');
                 }
@@ -308,23 +325,30 @@ class CustomMoreInfo {
         
     }
 
-    protected hideContentElements(
+    protected addDataSelectors(header: Element): void {
+        addDataSelectors(
+            header.querySelectorAll(SELECTOR.MENU_ITEM),
+            this._translations
+        );
+    }
+
+    protected processContentElements(
         container: Element | ShadowRoot,
-        visibility: InternalVisibility
+        internalConfig: InternalConfig
     ): void {
 
         const styles = [
-            visibility.hide_history
+            internalConfig.hide_history
                 ? getHiddenStyle(SELECTOR.MORE_INFO_HISTORY)
                 : '',
-            visibility.hide_logbook
+            internalConfig.hide_logbook
                 ? getHiddenStyle(SELECTOR.MORE_INFO_LOGBOOK)
                 : ''
         ];
 
         if (
-            visibility.hide_history ||
-            visibility.hide_logbook
+            internalConfig.hide_history ||
+            internalConfig.hide_logbook
         ) {
             addStyle(container, styles.join(''));
         } else {
@@ -333,16 +357,9 @@ class CustomMoreInfo {
 
     }
 
-    protected addDataSelectors(header: Element): void {
-        addDataSelectors(
-            header.querySelectorAll(SELECTOR.MENU_ITEM),
-            this._translations
-        );
-    }
-
-    protected hideHeaderElements(
+    protected processHeaderElements(
         content: Element,
-        visibility: InternalVisibility
+        internalConfig: InternalConfig
     ): void {
 
         if (!this._translations) {
@@ -350,7 +367,7 @@ class CustomMoreInfo {
             return;
         }
 
-        if (visibility.hide_header_history_icon) {
+        if (internalConfig.hide_header_history_icon) {
             addStyle(content, getHiddenStyle(SELECTOR.MORE_INFO_HEADER_HISTORY_ICON));
         } else {
             removeStyle(content);
@@ -361,7 +378,7 @@ class CustomMoreInfo {
 
         const entityId = attributes.__stateObj.entity_id;
         const deviceClass = attributes.__stateObj.attributes.device_class;
-        const domain = entityId.replace(/^(.+)\..+$/, '$1');
+        const domain = this._getDomain(entityId);
 
         this._debug(`getting the filters for ${entityId}`);
 
@@ -434,131 +451,155 @@ class CustomMoreInfo {
         
     }
 
-    protected getVisibility(
+    protected getInternalConfig(
         entityId: string,
         domain: string,
         deviceClass: string | undefined
-    ): InternalVisibility {
+    ): InternalConfig {
 
-        this._debug(`getting the visibility for ${entityId}`);
+        this._debug(`getting the conditional config for ${entityId}`);
 
-        if (this._visibility[entityId]) {
-            this._debug('the visibility for this entity have been found in memory, recovering visibility...');
-            this._debug(this._visibility[entityId]);
-            return this._visibility[entityId];
+        if (this._conditionalConfig[entityId]) {
+            this._debug('the conditional config for this entity have been found in memory, recovering conditional config...');
+            this._debug(this._conditionalConfig[entityId]);
+            return this._conditionalConfig[entityId];
         }
 
-        const hide = {
+        const internalConfig = {
             history: false,
             logbook: false,
-            header_history_icon: false
+            header_history_icon: false,
+            maximized_size: false
         };
 
         if (
-            this._anyVisbilityMatch(
+            this._anyConfigMatch(
                 this._config?.hide_history,
                 entityId,
                 deviceClass,
                 domain
             )
         ) {
-            hide.history = true;
+            internalConfig.history = true;
         }
 
         if (
-            this._anyVisbilityMatch(
+            this._anyConfigMatch(
                 this._config?.unhide_history,
                 entityId,
                 deviceClass,
                 domain
             )
         ) {
-            hide.history = false;
+            internalConfig.history = false;
         }
 
         if (
-            this._anyVisbilityMatch(
+            this._anyConfigMatch(
                 this._config?.hide_logbook,
                 entityId,
                 deviceClass,
                 domain
             )
         ) {
-            hide.logbook = true;
+            internalConfig.logbook = true;
         }
 
         if (
-            this._anyVisbilityMatch(
+            this._anyConfigMatch(
                 this._config?.unhide_logbook,
                 entityId,
                 deviceClass,
                 domain
             )
         ) {
-            hide.logbook = false;
+            internalConfig.logbook = false;
         }
 
         if (
-            this._anyVisbilityMatch(
+            this._anyConfigMatch(
                 this._config?.hide_header_history_icon,
                 entityId,
                 deviceClass,
                 domain
             )
         ) {
-            hide.header_history_icon = true;
+            internalConfig.header_history_icon = true;
         }
 
         if (
-            this._anyVisbilityMatch(
+            this._anyConfigMatch(
                 this._config?.unhide_header_history_icon,
                 entityId,
                 deviceClass,
                 domain
             )
         ) {
-            hide.header_history_icon = false;
+            internalConfig.header_history_icon = false;
         }
 
         if (
-            this._anyVisbilityMatch(
+            this._anyConfigMatch(
                 this._config?.hide_history_logbook,
                 entityId,
                 deviceClass,
                 domain
             )
         ) {
-            hide.history = true;
-            hide.logbook = true;
+            internalConfig.history = true;
+            internalConfig.logbook = true;
         }
 
         if (
-            this._anyVisbilityMatch(
+            this._anyConfigMatch(
                 this._config?.unhide_history_logbook,
                 entityId,
                 deviceClass,
                 domain
             )
         ) {
-            hide.history = false;
-            hide.logbook = false;
+            internalConfig.history = false;
+            internalConfig.logbook = false;
         }
 
-        this._visibility[entityId] = {
-            hide_history: hide.history,
-            hide_logbook: hide.logbook,
-            hide_header_history_icon: hide.header_history_icon ||
+        if (
+            this._anyConfigMatch(
+                this._config?.maximized_size,
+                entityId,
+                deviceClass,
+                domain
+            )
+        ) {
+            internalConfig.maximized_size = true;
+        }
+
+        if (
+            this._anyConfigMatch(
+                this._config?.default_size,
+                entityId,
+                deviceClass,
+                domain
+            )
+        ) {
+            internalConfig.maximized_size = false;
+        }
+
+        this._conditionalConfig[entityId] = {
+            hide_history: internalConfig.history,
+            hide_logbook: internalConfig.logbook,
+            hide_header_history_icon: internalConfig.header_history_icon ||
             (
                 !!this._config?.auto_hide_header_history_icon &&
-                hide.history &&
-                hide.logbook
-            )
+                internalConfig.history &&
+                internalConfig.logbook
+            ),
+            maximized_size: internalConfig.maximized_size
         };
 
-        this._debug('finished the visibility retrieval, printing the visibility...');
-        this._debug(this._visibility[entityId]);
+        this._debug('finished the conditonal config retrieval, printing the conditional config...');
+        this._debug(this._conditionalConfig[entityId]);
 
-        return this._visibility[entityId];
+        return this._conditionalConfig[entityId];
 
     }
 

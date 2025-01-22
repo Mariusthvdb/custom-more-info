@@ -22,7 +22,7 @@ export type AttributeFilters = Record<
     Record<string, string[]>
 >;
 
-export type ElementsVisibility = Record<
+export type ConditionalFilter = Record<
     ByTypes,
     string[]
 >;
@@ -33,15 +33,17 @@ export interface CustomMoreInfoConfig {
     unfilter_all?: boolean;
     filter_attributes?: AttributeFilters;   
     unfilter_attributes?: AttributeFilters;
-    hide_history_logbook?: ElementsVisibility;
-    unhide_history_logbook?: ElementsVisibility;
-    hide_history?: ElementsVisibility;
-    hide_logbook?: ElementsVisibility;
-    unhide_history?: ElementsVisibility;
-    unhide_logbook?: ElementsVisibility;
-    hide_header_history_icon?: ElementsVisibility;
-    unhide_header_history_icon?: ElementsVisibility;
+    hide_history_logbook?: ConditionalFilter;
+    unhide_history_logbook?: ConditionalFilter;
+    hide_history?: ConditionalFilter;
+    hide_logbook?: ConditionalFilter;
+    unhide_history?: ConditionalFilter;
+    unhide_logbook?: ConditionalFilter;
+    hide_header_history_icon?: ConditionalFilter;
+    unhide_header_history_icon?: ConditionalFilter;
     auto_hide_header_history_icon?: boolean;
+    maximized_size?: ConditionalFilter;
+    default_size?: ConditionalFilter;
 }
 
 export interface InternalFilters {
@@ -49,10 +51,11 @@ export interface InternalFilters {
     unfilter_attributes: string[];
 }
 
-export interface InternalVisibility {
+export interface InternalConfig {
     hide_history: boolean;
     hide_logbook: boolean;
     hide_header_history_icon: boolean;
+    maximized_size: boolean;
 }
 
 export interface Lovelace extends HTMLElement {
@@ -82,6 +85,7 @@ export interface MoreInfoDialog extends HTMLElement {
         original_device_class?: string;
     };
     ___entityId: string;
+    large: boolean;
 }
 
 declare global {
