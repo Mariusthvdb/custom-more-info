@@ -40,6 +40,7 @@ export const MENU_REFERENCES = Object.freeze({
 });
 
 export const ESCAPE_REG_EXP = /[.?+^$[\]\\(){}|-]/g;
+export const DOMAIN_REG_EXP = /^(.+)\..+$/;
 
 export const ALL_FILTER = 'all';
 
