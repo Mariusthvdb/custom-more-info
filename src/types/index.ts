@@ -3,8 +3,7 @@ export interface CustomMoreInfoClass {
 
 export interface HomeAssistant extends HTMLElement {
 	hass: {
-        language: string;
-        resources: Record<string, Record<string, string>>;
+        localize: (path: string) => string;
     };
 }
 
@@ -76,15 +75,15 @@ export interface StateObject {
 
 export interface Attributes extends Element {
     extraFilters: string | undefined;
-    __stateObj: StateObject;
+    stateObj: StateObject;
 }
 
 export interface MoreInfoDialog extends HTMLElement {
-    ___entry?: {
+    _entry?: {
         entity_id: string;
         original_device_class?: string;
     };
-    ___entityId: string;
+    _entityId: string;
     large: boolean;
 }
 

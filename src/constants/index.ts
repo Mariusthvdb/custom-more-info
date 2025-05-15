@@ -31,12 +31,13 @@ export enum MENU {
 }
 
 const UI_PREFIX = 'ui';
+const COMMON_PREFIX = `${UI_PREFIX}.common`;
 const DIALOGS_PREFIX = `${UI_PREFIX}.dialogs.more_info_control`;
 
 export const MENU_REFERENCES = Object.freeze({
 	[MENU.DIALOG_HISTORY]: `${DIALOGS_PREFIX}.history`,
 	[MENU.DIALOG_SETTINGS]: `${DIALOGS_PREFIX}.settings`,
-	[MENU.DIALOG_DISMISS]: `${DIALOGS_PREFIX}.dismiss`
+	[MENU.DIALOG_DISMISS]: `${COMMON_PREFIX}.close`
 });
 
 export const ESCAPE_REG_EXP = /[.?+^$[\]\\(){}|-]/g;
