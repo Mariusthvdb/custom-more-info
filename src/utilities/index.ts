@@ -1,3 +1,4 @@
+import { getPromisableResult } from 'get-promisable-result';
 import { HomeAssistant } from '@types';
 import {
     STYLES_PREFIX,
@@ -43,76 +44,25 @@ export const getHiddenStyle = (elementName: string): string => {
     }`;
 };
 
-export const getPromisableElement = <T>(
-	getElement: () => T,
-	check: (element: T) => boolean
-): Promise<T> => {
-	return new Promise<T>((resolve) => {
-		let attempts = 0;
-		const select = () => {
-			const element: T = getElement();
-			if (check(element)) {
-				resolve(element);
-			} else {
-				attempts++;
-				if (attempts < MAX_ATTEMPTS) {
-					setTimeout(select, RETRY_DELAY);
-				} else {
-					resolve(element);
-				}
-			}
-		};
-		select();
-	});
-};
-
-const getHAResources = (ha: HomeAssistant): Promise<Record<string, Record<string, string>>> => {
-	let attempts = 0;
-	const referencePaths = Object.values(MENU_REFERENCES);
-	return new Promise((resolve, reject) => {
-		const getResources = () => {
-			const resources = ha?.hass?.resources;
-			let success = false;
-			if (resources) {
-				const language = ha.hass.language;
-				// check if all the resources are available
-				const anyEmptyResource = referencePaths.find((path: string) => {
-					if (resources[language][path]) {
-						return false;
-					}
-					return true;
-				});
-				if (!anyEmptyResource) {
-					success = true;
-				}
-			}
-			if (success) {
-				resolve(resources);
-			} else {
-				attempts++;
-				if (attempts < MAX_ATTEMPTS) {
-					setTimeout(getResources, RETRY_DELAY);
-				} else {
-					reject();
-				}
-			}
-		};
-		getResources();
-	});
-};
-
 export const getTranslations = async(
 	ha: HomeAssistant
 ): Promise<Record<string, string>> => {
-	const resources = await getHAResources(ha);
-	const language = ha.hass.language;
-	const resourcesTranslated = resources[language];
-	const entries = Object.entries(MENU_REFERENCES);
-	const menuTranslationsEntries = entries.map((entry: [string, string]) => {
-		const [reference, prop] = entry;
-		return [resourcesTranslated[prop], reference];
-	});
-	return Object.fromEntries(menuTranslationsEntries);
+	const referencePaths = Object.entries(MENU_REFERENCES);
+	const translations = await getPromisableResult(
+		() => referencePaths.map((entry): [string, string] => {
+			const [key, translationPath] = entry;
+			return [ha.hass.localize(translationPath), key];
+		}),
+		(translationEntries: [string, string][]): boolean => {
+			return !translationEntries.find((entry) => !entry[0]);
+		},
+		{
+			retries: MAX_ATTEMPTS,
+			delay: RETRY_DELAY
+		}
+	);
+
+	return Object.fromEntries(translations);
 };
 
 export const addDataSelectors = (

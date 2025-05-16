@@ -1,3 +1,4 @@
+import { getPromisableResult } from 'get-promisable-result';
 import {
     HAQuerySelector,
     HAQuerySelectorEvent,
@@ -30,7 +31,6 @@ import {
     addStyle,
     removeStyle,
     getHiddenStyle,
-    getPromisableElement,
     getTranslations,
     addDataSelectors
 } from '@utilities';
@@ -98,15 +98,15 @@ class CustomMoreInfo {
     }
 
     private _getDialogEntityId(dialog: MoreInfoDialog): Promise<string> {
-        return getPromisableElement(
-            () => dialog.___entry?.entity_id || dialog.___entityId,
+        return getPromisableResult(
+            () => dialog._entry?.entity_id || dialog._entityId,
             (entityId: string): boolean => !!entityId
         );
     }
 
     private _getDialogDeviceClass(dialog: MoreInfoDialog): Promise<string> {
-        return getPromisableElement(
-            () => dialog.___entry?.original_device_class,
+        return getPromisableResult(
+            () => dialog._entry?.original_device_class,
             (deviceClass: string | null): boolean => deviceClass === null || typeof deviceClass === 'string'
         );
     }
@@ -314,9 +314,9 @@ class CustomMoreInfo {
 
                 if (
                     IGNORED_ATTRIBUTES.includes(filter) &&
-                    filter in attributes.__stateObj.attributes
+                    filter in attributes.stateObj.attributes
                 ) {
-                    attributes.__stateObj.attributes[`${filter} `] = attributes.__stateObj.attributes[filter];
+                    attributes.stateObj.attributes[`${filter} `] = attributes.stateObj.attributes[filter];
                 }
 
             });
@@ -376,8 +376,8 @@ class CustomMoreInfo {
 
     protected getFilters(attributes: Attributes): InternalFilters {
 
-        const entityId = attributes.__stateObj.entity_id;
-        const deviceClass = attributes.__stateObj.attributes.device_class;
+        const entityId = attributes.stateObj.entity_id;
+        const deviceClass = attributes.stateObj.attributes.device_class;
         const domain = this._getDomain(entityId);
 
         this._debug(`getting the filters for ${entityId}`);
@@ -428,14 +428,14 @@ class CustomMoreInfo {
         if (this._config?.filter_all || filters.has(ALL_FILTER)) {
             this._addSetValues(
                 filters,
-                Object.keys(attributes.__stateObj.attributes)
+                Object.keys(attributes.stateObj.attributes)
             );
         }
 
         if (this._config?.unfilter_all || unFilters.has(ALL_FILTER)) {
             this._addSetValues(
                 unFilters,
-                Object.keys(attributes.__stateObj.attributes)
+                Object.keys(attributes.stateObj.attributes)
             );
         }
 
