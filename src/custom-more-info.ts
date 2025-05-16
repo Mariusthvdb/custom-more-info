@@ -100,14 +100,24 @@ class CustomMoreInfo {
     private _getDialogEntityId(dialog: MoreInfoDialog): Promise<string> {
         return getPromisableResult(
             () => dialog._entry?.entity_id || dialog._entityId,
-            (entityId: string): boolean => !!entityId
+            (entityId: string): boolean => !!entityId,
+            {
+                shouldReject: false,
+                retries: MAX_ATTEMPTS,
+                delay: RETRY_DELAY
+		    }
         );
     }
 
     private _getDialogDeviceClass(dialog: MoreInfoDialog): Promise<string> {
         return getPromisableResult(
             () => dialog._entry?.original_device_class,
-            (deviceClass: string | null): boolean => deviceClass === null || typeof deviceClass === 'string'
+            (deviceClass: string | null): boolean => deviceClass === null || typeof deviceClass === 'string',
+            {
+                shouldReject: false,
+                retries: MAX_ATTEMPTS,
+                delay: RETRY_DELAY
+            }
         );
     }
 
