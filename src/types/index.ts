@@ -1,9 +1,20 @@
 export interface CustomMoreInfoClass {
 }
 
+export interface ExtendedEntityRegistryEntry {
+    entity_id: string;
+    original_device_class: string;
+}
+
+export interface WebSocketCall {
+    type: string;
+    entity_id: string;
+}
+
 export interface HomeAssistant extends HTMLElement {
 	hass: {
         localize: (path: string) => string;
+        callWS: <T>(options: WebSocketCall) => Promise<T>;
     };
 }
 
@@ -79,6 +90,7 @@ export interface Attributes extends Element {
 }
 
 export interface MoreInfoDialog extends HTMLElement {
+    hass: HomeAssistant['hass'];
     _entry?: {
         entity_id: string;
         original_device_class?: string;
