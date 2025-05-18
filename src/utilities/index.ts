@@ -57,6 +57,7 @@ export const getTranslations = async(
 			return !translationEntries.find((entry) => !entry[0]);
 		},
 		{
+			shouldReject: false,
 			retries: MAX_ATTEMPTS,
 			delay: RETRY_DELAY
 		}

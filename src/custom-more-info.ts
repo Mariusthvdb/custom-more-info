@@ -1,4 +1,3 @@
-import { getPromisableResult } from 'get-promisable-result';
 import {
     HAQuerySelector,
     HAQuerySelectorEvent,
@@ -9,6 +8,7 @@ import {
 import {
     Lovelace,
     CustomMoreInfoConfig,
+    ExtendedEntityRegistryEntry,
     Attributes,
     InternalFilters,
     InternalConfig,
@@ -55,6 +55,10 @@ class CustomMoreInfo {
             this._debug('a history and logbook dialog has been opened so applying customizations');
             this.queryDialogElements(event.detail);
 		});
+        this._extendedEntityRegistryEntry = new Map<
+            string,
+            ExtendedEntityRegistryEntry
+        >();
         this._selector.listen();
     }
 
@@ -63,6 +67,10 @@ class CustomMoreInfo {
     private _filters: Record<string, InternalFilters>;
     private _conditionalConfig: Record<string, InternalConfig>;
     private _translations: Record<string, string>;
+    private _extendedEntityRegistryEntry: Map<
+        string,
+        ExtendedEntityRegistryEntry
+    >;
 
     private _insertAttributesGlobs(
         entityId: string,
@@ -97,18 +105,30 @@ class CustomMoreInfo {
         );
     }
 
-    private _getDialogEntityId(dialog: MoreInfoDialog): Promise<string> {
-        return getPromisableResult(
-            () => dialog._entry?.entity_id || dialog._entityId,
-            (entityId: string): boolean => !!entityId
-        );
-    }
+    private async _getExtendedEntityRegistryEntry(
+        dialog: MoreInfoDialog
+    ): Promise<ExtendedEntityRegistryEntry | null> {
+        const entity_id = dialog._entityId;
+        if (entity_id) {
+            return (
+                this._extendedEntityRegistryEntry.get(entity_id) ??
+                dialog.hass.callWS<ExtendedEntityRegistryEntry>({
+                    type: 'config/entity_registry/get',
+                    entity_id
+                })
+                    .then((registry: ExtendedEntityRegistryEntry) => {
+                        this._extendedEntityRegistryEntry.set(entity_id, registry);
+                        return registry;
+                    })
+                    .catch((): null => null)
+            );
+        }
+        return null;        
+    };
 
-    private _getDialogDeviceClass(dialog: MoreInfoDialog): Promise<string> {
-        return getPromisableResult(
-            () => dialog._entry?.original_device_class,
-            (deviceClass: string | null): boolean => deviceClass === null || typeof deviceClass === 'string'
-        );
+    private async _getDialogDeviceClass(dialog: MoreInfoDialog): Promise<string | null> {
+        const registry = await this._getExtendedEntityRegistryEntry(dialog);
+        return registry?.original_device_class ?? null;
     }
 
     private _getDomain(entityId: string): string {
@@ -246,7 +266,7 @@ class CustomMoreInfo {
         } = detail;
 
         const dialog = await HA_MORE_INFO_DIALOG.element as MoreInfoDialog;
-        const entityId = await this._getDialogEntityId(dialog);
+        const entityId = dialog._entityId;
         const deviceClass = await this._getDialogDeviceClass(dialog);
         const domain = this._getDomain(entityId);
 
