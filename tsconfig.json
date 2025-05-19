@@ -1,16 +1,16 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/",
+    "outDir": "./",
     "module": "esnext",
     "target": "ES5",
     "moduleResolution": "node",
-    "types": ["node"],
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "declaration": false,
     "noImplicitAny": true,
     "removeComments": true,
     "baseUrl": "./src",
+    "rootDir": "src",
     "paths": {
       "@types": ["types"],
       "@constants": ["constants"],
