@@ -1,15 +1,13 @@
-import ts from 'rollup-plugin-ts';
+import typescript from '@rollup/plugin-typescript';
 import json from '@rollup/plugin-json';
-import { terser } from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 export default {
 	plugins: [
 		nodeResolve(),
 		json(),
-		ts({
-			browserslist: false
-		}),
+		typescript(),
 		terser({
 			output: {
 				comments: false
