@@ -47,7 +47,7 @@ custom_more_info:
 Available configuration options:
 
 * `debug`
-
+* `maximized_size`
 * `auto_hide_header_history_icon`
 * `hide_header_history_icon`
 * `unhide_header_history_icon`
@@ -65,7 +65,6 @@ Available configuration options:
 ```yaml
 custom_more_info:
   debug: true
-
   auto_hide_header_history_icon: true
   hide_header_history_icon:
     # parameters
@@ -96,6 +95,18 @@ The parameters control which attributes and sections should be (un)filtered in t
 custom_more_info:
 
   debug: true/false
+
+  maximized_size:
+    by_entity_id:
+      - sensor.netto_verbruik
+    by_domain:
+      - sensor
+    by_device_class:
+      - door
+    by_glob:
+      - 'sensor.*_actueel'
+      - 'sensor.*_totaal'
+
   filter_all: true ##
   filter_attributes:
     by_entity_id:
