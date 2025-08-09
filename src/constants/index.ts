@@ -11,11 +11,14 @@ export enum SELECTOR {
     MORE_INFO_CONTENT = 'more-info-content',
     MORE_INFO_HISTORY = 'ha-more-info-history',
     MORE_INFO_LOGBOOK = 'ha-more-info-logbook',
+    MORE_INFO_HISTORY_AND_LOGBOOK = 'ha-more-info-history-and-logbook',
+    MORE_INFO_INFO = 'ha-more-info-info',
     HA_ATTRIBUTES = 'ha-attributes',
     MENU_ITEM = 'ha-icon-button',
     MENU_ITEM_ICON = 'mwc-icon-button',
     MORE_INFO_HEADER = 'ha-dialog-header',
-    MORE_INFO_HEADER_HISTORY_ICON = 'ha-icon-button[data-custom-selector="DIALOG_HISTORY"]'
+    MORE_INFO_HEADER_HISTORY_ICON = 'ha-icon-button[data-custom-selector="DIALOG_HISTORY"]',
+    HOST_DIRECT_CHILDREN = ':host > *',
 }
 
 export enum MENU {

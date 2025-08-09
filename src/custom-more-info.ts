@@ -242,17 +242,43 @@ class CustomMoreInfo {
             .selector
             .$
             .query(SELECTOR.MORE_INFO_CONTENT)
-            .deepQuery(SELECTOR.HA_ATTRIBUTES)
-            .element
-            .then((attributes: Attributes): void => {
+            .$
+            .query(SELECTOR.HOST_DIRECT_CHILDREN)
+            .all
+            .then((children: NodeListOf<HTMLElement>): void => {
+
                 this._debug('finished the task of querying attributes, the result is');
-                if (attributes) {
-                    this._debug('attributes have been found');
-                    this._debug(attributes);
-                    this.filterAttributes(attributes);
-                } else {
+
+                let found = false;
+
+                // Filter children with `more-info-` prefix
+                const moreInfoChildren = Array.from(children).filter((child: HTMLElement): boolean => {
+                    return child.nodeName.startsWith('MORE-INFO-');
+                });
+
+                // Query for attributes in each more-info children
+                for (const child of moreInfoChildren) {
+
+                    const rootAttributes = child.querySelector<Attributes>(SELECTOR.HA_ATTRIBUTES);
+                    const shadowRootAttributes = child.shadowRoot
+                        ? child.shadowRoot.querySelector<Attributes>(SELECTOR.HA_ATTRIBUTES)
+                        : null;
+                    const attributes = rootAttributes || shadowRootAttributes;
+                    if (attributes) {
+
+                        this._debug('attributes have been found');
+                        this._debug(attributes);
+                        this.filterAttributes(attributes);
+
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
                     this._debug('this dialog doesn‘t have attributes or the attributes have not been found');
                 }
+
             });
 
     }
@@ -294,26 +320,49 @@ class CustomMoreInfo {
                     this._debug('this dialog doesn‘t have a header or it has not been found');
                 }
             });
-            
+
         HA_DIALOG_CONTENT
             .selector
-            .deepQuery(
+            .query(
                 [
-                    SELECTOR.MORE_INFO_HISTORY,
-                    SELECTOR.MORE_INFO_LOGBOOK
+                    SELECTOR.MORE_INFO_HISTORY_AND_LOGBOOK,
+                    SELECTOR.MORE_INFO_INFO
                 ].join(',')
             )
+            .$
             .element
-            .then((element: Element): void => {
+            .then((container: ShadowRoot) => {
+
+                let found = false;
+                
                 this._debug('finished the task of querying the history or logbook of the dialog, the result is');
-                if (element) {
-                    const container = element.parentElement || element.getRootNode() as ShadowRoot;
-                    this._debug('history or logbook have been found');
-                    this._debug(element);
-                    this.processContentElements(container, internalConfig);
-                } else {
+
+                if (container) {
+
+                    const element = container.querySelector<HTMLElement>(
+                        [
+                            SELECTOR.MORE_INFO_HISTORY,
+                            SELECTOR.MORE_INFO_LOGBOOK
+                        ].join(',')
+                    );
+                    
+                    if (element) {
+
+                        const container = (element.parentElement || element.getRootNode()) as ShadowRoot;
+                        this._debug('history or logbook have been found');
+                        this._debug(element);
+                        this.processContentElements(container, internalConfig);
+
+                        found = true;
+
+                    }
+
+                }
+
+                if (!found) {
                     this._debug('this dialog doesn‘t have history or logbook or they have not been found.');
                 }
+
             });
             
     }
