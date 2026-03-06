@@ -16,14 +16,14 @@
   },
   "devDependencies": {
     "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-node-resolve": "^16.0.1",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^12.1.2",
-    "rollup": "^4.40.2",
-    "typescript": "^5.8.3"
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^1.0.0",
+    "@rollup/plugin-typescript": "^12.3.0",
+    "rollup": "^4.59.0",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
-    "get-promisable-result": "^1.0.1",
-    "home-assistant-query-selector": "^4.3.0"
+    "get-promisable-result": "^1.0.2",
+    "home-assistant-query-selector": "^5.0.0"
   }
 }
