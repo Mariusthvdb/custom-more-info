@@ -31,6 +31,7 @@ import {
     addStyle,
     removeStyle,
     getHiddenStyle,
+    getLovelaceConfig,
     getTranslations,
     addDataSelectors
 } from '@utilities';
@@ -200,8 +201,9 @@ class CustomMoreInfo {
 
     protected storeConfig(detail: OnLovelacePanelLoadDetail): void {
         detail.HA_PANEL_LOVELACE.element
-            .then((lovelacePanel: Lovelace): void => {
-                const config = lovelacePanel?.lovelace?.config?.custom_more_info;
+            .then(async (lovelacePanel: Lovelace): Promise<void> => {
+                const lovelaceConfig = await getLovelaceConfig(lovelacePanel);
+                const config = lovelaceConfig?.custom_more_info;
                 if (config) {
                     this._config = config;
                     this._debug('the config has been loaded, printing the config...');

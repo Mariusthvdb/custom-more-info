@@ -1,5 +1,5 @@
 import { getPromisableResult } from 'get-promisable-result';
-import { HomeAssistant } from '@types';
+import { HomeAssistant, Lovelace } from '@types';
 import {
     STYLES_PREFIX,
     MAX_ATTEMPTS,
@@ -42,6 +42,15 @@ export const getHiddenStyle = (elementName: string): string => {
     return `${elementName} {
         display: none !important;
     }`;
+};
+
+export const getLovelaceConfig = async(
+	lovelacePanel: Lovelace
+): Promise<Lovelace['lovelace']['config']> => {
+	return await getPromisableResult(
+		() => lovelacePanel?.lovelace?.config,
+		(lovelaceConfig: Lovelace['lovelace']['config']) => !!lovelaceConfig
+	);
 };
 
 export const getTranslations = async(

@@ -19,11 +19,11 @@
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^1.0.0",
     "@rollup/plugin-typescript": "^12.3.0",
-    "rollup": "^4.59.0",
+    "rollup": "^4.60.1",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "get-promisable-result": "^1.0.2",
-    "home-assistant-query-selector": "^5.0.0"
+    "get-promisable-result": "^2.0.0",
+    "home-assistant-query-selector": "^6.1.0"
   }
 }
