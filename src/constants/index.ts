@@ -15,8 +15,7 @@ export enum SELECTOR {
     MORE_INFO_INFO = 'ha-more-info-info',
     HA_ATTRIBUTES = 'ha-attributes',
     MENU_ITEM = 'ha-icon-button',
-    MENU_ITEM_ICON = 'mwc-icon-button',
-    MORE_INFO_HEADER = 'ha-dialog-header',
+    HA_BUTTON = 'ha-button',
     MORE_INFO_HEADER_HISTORY_ICON = 'ha-icon-button[data-custom-selector="DIALOG_HISTORY"]',
     HOST_DIRECT_CHILDREN = ':host > *',
 }
