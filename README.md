@@ -4,6 +4,7 @@ Due to ongoing developments in Home Assistant, this custom component no longer w
 
 Rather than leave the impression that the project is actively maintained, I’ve decided to mark this repository as **no longer maintained**. I’m grateful to everyone who has used the component, reported issues, or contributed along the way. Thank you for your understanding and support!
 
+Although no longer maintained, this repository has not been archived and remains open for anyone interested in forking it, contributing fixes, or continuing its development.
 
 # Custom More-info for Home Assistant
 
