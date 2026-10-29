@@ -2,19 +2,20 @@
   "compilerOptions": {
     "outDir": "./",
     "module": "esnext",
-    "target": "ES5",
+    "target": "es6",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "declaration": false,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "removeComments": true,
     "baseUrl": "./src",
     "rootDir": "src",
+    "allowJs": true,
     "paths": {
       "@types": ["types"],
       "@constants": ["constants"],
-      "@utilities": ["utilities"]  
+      "@utilities": ["utilities"]
     }
   },
   "include": ["src/**/*.ts"],
