@@ -1,3 +1,10 @@
+# This repo is no longer maintained
+
+Due to ongoing developments in Home Assistant, this custom component no longer works as intended, and unfortunately, keeping it compatible with the latest changes is beyond my current capabilities. 
+
+Rather than leave the impression that the project is actively maintained, I’ve decided to mark this repository as **no longer maintained**. I’m grateful to everyone who has used the component, reported issues, or contributed along the way. Thank you for your understanding and support!
+
+
 # Custom More-info for Home Assistant
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=flat-square)](https://github.com/hacs/integration)
