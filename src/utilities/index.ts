@@ -76,17 +76,17 @@ export const getTranslations = async(
 };
 
 export const addDataSelectors = (
-	items: NodeListOf<HTMLElement>,
+	menuItems: NodeListOf<HTMLElement>,
 	translations: Record<string, string>
 ): void => {
-	items.forEach((item: HTMLElement): void => {
+	menuItems.forEach((item: HTMLElement): void => {
 		if (
 			item &&
 			item.dataset &&
 			!item.dataset.customSelector
 		) {
-			const icon = item.shadowRoot.querySelector<HTMLElement>(SELECTOR.MENU_ITEM_ICON);
-			item.dataset.customSelector = translations[icon.title];
+			const button = item.shadowRoot.querySelector<HTMLElement>(SELECTOR.HA_BUTTON);
+			item.dataset.customSelector = translations[button.title];
 		}
 	});
 };

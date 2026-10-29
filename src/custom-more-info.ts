@@ -167,7 +167,7 @@ class CustomMoreInfo {
         if (this._config?.debug) {
             if (
                 typeof message === 'object' &&
-                !(message instanceof Node)
+                !(message instanceof Node || message instanceof NodeList)
             ) {
                 console.debug(
                     JSON.stringify(message, null, 4)
@@ -309,17 +309,16 @@ class CustomMoreInfo {
         }
 
         HA_DIALOG
-            .selector
-            .query(SELECTOR.MORE_INFO_HEADER)
             .element
-            .then((header: Element): void => {
-                if (header) {
-                    this._debug('finished the task of querying the header, the result is');
-                    this._debug(header);
-                    this.addDataSelectors(header);
-                    this.processHeaderElements(header, internalConfig);
+            .then((haDialog: HTMLElement) => {
+                const menuItems = haDialog.querySelectorAll<HTMLElement>(SELECTOR.MENU_ITEM);
+                if (menuItems.length) {
+                    this._debug('finished the task of querying the header icons, the result is');
+                    this._debug(menuItems);
+                    this.addDataSelectors(menuItems);
+                    this.processHeaderElements(haDialog, internalConfig);
                 } else {
-                    this._debug('this dialog doesn‘t have a header or it has not been found');
+                    this._debug('this dialog doesn‘t have a header icons or they have not been found');
                 }
             });
 
@@ -396,9 +395,9 @@ class CustomMoreInfo {
         
     }
 
-    protected addDataSelectors(header: Element): void {
+    protected addDataSelectors(menuItems: NodeListOf<HTMLElement>): void {
         addDataSelectors(
-            header.querySelectorAll(SELECTOR.MENU_ITEM),
+            menuItems,
             this._translations
         );
     }
@@ -429,19 +428,17 @@ class CustomMoreInfo {
     }
 
     protected processHeaderElements(
-        content: Element,
+        haDialog: HTMLElement,
         internalConfig: InternalConfig
     ): void {
-
         if (!this._translations) {
             this._debug('skiping the header history task, because translations don‘t exist');
             return;
         }
-
         if (internalConfig.hide_header_history_icon) {
-            addStyle(content, getHiddenStyle(SELECTOR.MORE_INFO_HEADER_HISTORY_ICON));
+            addStyle(haDialog, getHiddenStyle(SELECTOR.MORE_INFO_HEADER_HISTORY_ICON));
         } else {
-            removeStyle(content);
+            removeStyle(haDialog);
         }
     }
 
